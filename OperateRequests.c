@@ -6,7 +6,7 @@
 int RequestComparator(void* a, void* b) {
 	Request** r1 = (Request**)a;
 	Request** r2 = (Request**)b;
-	int res = (int)difftime(_mkgmtime(&(*r1)->req_time_get), _mkgmtime(&(*r2)->req_time_get));
+	int res = (int)difftime(gmtime(&(*r1)->req_time_get), gmtime(&(*r2)->req_time_get));
 	return res;
 }
 
@@ -158,11 +158,11 @@ kErrors SimulateModel(MainModel* model, FILE* out) {
 	Department* dep_moved_to = NULL;
 
 	while (true) {
-		gmtime_s(t, &model->current_time);
+		gmtime_r(t, &model->current_time);
 		strftime(time_string, 1024, "%Y-%m-%d %H:%M:%S", t);
 		cur_req = queue_front(model->pending_requests);
 		while(model->pending_requests->size > 0 && 
-			difftime(model->current_time, _mkgmtime(&cur_req->req_time_get)) >= 0 &&
+			difftime(model->current_time, gmtime(&cur_req->req_time_get)) >= 0 &&
 			model->pending_requests->size > 0) {	
 
 			
