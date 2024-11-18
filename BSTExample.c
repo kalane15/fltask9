@@ -6,9 +6,10 @@
 #include "string.h"
 #include "BSTExample.h"
 
-kErrors BSTCreate(BST* tree, int (*_cmp)(char*, char*)) {
+kErrors BSTCreate(BST* tree, int (*_cmp)(char*, char*), MainModel* model) {
 	tree->cmpLess = _cmp;
 	tree->root = NULL;
+	tree->model = model;
 	return SUCCESS;
 }
 
@@ -51,8 +52,9 @@ kErrors BSTInsert(BST* tree, Department* data) {
 	return SUCCESS;
 }
 
-void BSTFreeNode(BSTNode* node) {
-	free(node); //free other data TO DO
+void BSTFreeNode(BSTNode* node, MainModel* model) {
+	DepFree(node->data, model);
+	free(node);
 }
 
 kErrors BSTDelete(BST* tree, char* id) {
@@ -83,14 +85,14 @@ kErrors BSTDelete(BST* tree, char* id) {
 		
 		if (prev_res == (*to_delete)) {
 			res->right = (*to_delete)->right;
-			BSTFreeNode(*to_delete);
+			BSTFreeNode(*to_delete, tree->model);
 			*to_delete = res;
 		}
 		else {
 			prev_res->right = NULL;
 			res->right = (*to_delete)->right;
 			res->left = (*to_delete)->left;
-			BSTFreeNode(*to_delete);
+			BSTFreeNode(*to_delete, tree->model);
 			*to_delete = res;
 		}				
 	}
@@ -104,14 +106,14 @@ kErrors BSTDelete(BST* tree, char* id) {
 
 		if (prev_res == (*to_delete)) {
 			res->left = (*to_delete)->left;
-			BSTFreeNode(*to_delete);
+			BSTFreeNode(*to_delete, tree->model);
 			*to_delete = res;
 		}
 		else {
 			prev_res->left = NULL;
 			res->left = (*to_delete)->left;
 			res->right = (*to_delete)->right;
-			BSTFreeNode(*to_delete);
+			BSTFreeNode(*to_delete, tree->model);
 			*to_delete = res;
 		}
 	}
@@ -160,15 +162,16 @@ Department* BSTSearch(BST* tree, char* id) {
 	return current->data;
 }
 
-void BSTFreeTreeRecursive(BSTNode* node) {
+void BSTFreeTreeRecursive(BSTNode* node, MainModel* model) {
 	if (node == NULL) {
 		return;
 	}
-	BSTFreeTreeRecursive(node->left);
-	BSTFreeTreeRecursive(node->right);
-	BSTFreeNode(node);
+	BSTFreeTreeRecursive(node->left, model);
+	BSTFreeTreeRecursive(node->right, model);
+	BSTFreeNode(node, model);
 }
 
-void BSTFreeTree(BST* tree) {
-	BSTFreeTreeRecursive(tree->root);
+void BSTFree(BST* tree) {
+	BSTFreeTreeRecursive(tree->root, tree->model);
+	free(tree);
 }

@@ -94,9 +94,9 @@ kErrors GenericDeleteMax(void* req_queue, Request** out, MainModel* model) {
 kErrors GenericCreateDepStruct(void* structure, MainModel* model) {
 	switch (model->dep_store_type) {
 		case DYNAMIC_ARRAY:
-			return DArrayCreate((DArray*)structure, cmpDA, cmpId);
+			return DArrayCreate((DArray*)structure, cmpDA, cmpId, model);
 		case BINARY_SEARCH_TREE:
-			return BSTCreate((BST*)structure, cmpId);
+			return BSTCreate((BST*)structure, cmpId, model);
 	}
 	return INC_INP_DATA;
 }
@@ -121,4 +121,33 @@ kErrors GenericMeldReqPq(void* q_from, void* q_to, MainModel* model) {
 			return BinaryHeapMeld((BinaryHeapPriorityQueue*)q_from, (BinaryHeapPriorityQueue*)q_to);
 	}
 	return INC_INP_DATA;
+}
+
+void GenericFreeReqStruct(void* st, MainModel* model) {
+	switch (model->req_store_type) {
+	case SKEW_HEAP:
+		SkewHeapFree((SkewHeapPriorityQueue*)st);
+	case LEFTIST_HEAP:
+		LeftistHeapFreePriorityQueue((LeftistHeapPriorityQueue*)st);
+	case BINARY_HEAP:
+		BinaryHeapFreePriorityQueue((BinaryHeapPriorityQueue*)st);
+	}
+	return INC_INP_DATA;
+}
+
+void GenericFreeDepStruct(void* st, MainModel* model) {
+	switch (model->dep_store_type) {
+	case DYNAMIC_ARRAY:
+		return DArrayFree((DArray*)st, model);
+	case BINARY_SEARCH_TREE:
+		return BSTFree((BST*)st);
+	}
+}
+
+void GenericFreeAll(MainModel* model) {
+	free(model->current_time_string);
+	queue_destroy(model->pending_requests);
+	GenericFreeDepStruct(model->departments_storage_structure, model);	
+	free(model->departments_storage_array);
+	//GenericFreeDepStruct(model->departments_storage_structure, model);
 }

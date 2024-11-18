@@ -14,17 +14,18 @@ typedef struct DArray {
 	DANode** buffer;
 	int (*cmp)(void*, void*);
 	int (*cmpById)(char*, char*);
+	MainModel* model;
 } DArray;
 
 
 
-kErrors DArrayCreate(DArray* arr, int (*_cmp)(void*, void*), int (*_cmpById)(char*, char*));
+kErrors DArrayCreate(DArray* arr, int (*_cmp)(void*, void*), int (*_cmpById)(char*, char*), MainModel* model);
 
 DANode* DArrayCreateNode(Department* data, const char* id);
 
 kErrors DArrayInsert(DArray* arr, Department* data, const char* id);
 
-void DAFreeNode(DANode* node);
+void DAFreeNode(DANode* node, MainModel* m);
 
 kErrors DArrayDelete(DArray* arr, char* id);
 
@@ -36,4 +37,4 @@ kErrors DAFindIndex(DArray* arr, char* id, int* out);
 
 Department* DArraySearch(DArray* arr, char* id);
 
-void DArrayFree(DArray* arr);
+void DArrayFree(DArray* arr, MainModel* m);

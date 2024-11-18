@@ -5,7 +5,7 @@
 #include "string.h"
 #include "DynamicArray.h"
 
-kErrors DArrayCreate(DArray* arr, int(*_cmp)(void*, void*), int (*_cmpById)(char*, char*))
+kErrors DArrayCreate(DArray* arr, int(*_cmp)(void*, void*), int (*_cmpById)(char*, char*), MainModel* model)
 {
     arr->capacity = 10;
     arr->cmp = _cmp;
@@ -15,6 +15,7 @@ kErrors DArrayCreate(DArray* arr, int(*_cmp)(void*, void*), int (*_cmpById)(char
         return MEM_ALLOC_ERR;
     }
     arr->size = 0;
+    arr->model = model;
     return SUCCESS;
 }
 
@@ -55,9 +56,10 @@ kErrors DArrayInsert(DArray* arr, Department* data, const char* id)
     return SUCCESS;
 }
 
-void DAFreeNode(DANode* node)
+void DAFreeNode(DANode* node, MainModel* model)
 {
     free(node->id);
+    DepFree(node->data, model);
     free(node);
 }
 
@@ -68,7 +70,7 @@ kErrors DArrayDelete(DArray* arr, char* id)
     if (status != SUCCESS) {
         return status;
     }
-    DAFreeNode(arr->buffer[ind]);
+    DAFreeNode(arr->buffer[ind], arr->model);
     for (int i = ind; i < arr->size - 1; i++) {
         arr->buffer[i] = arr->buffer[i + 1];
     }
@@ -122,10 +124,11 @@ Department* DArraySearch(DArray* arr, char* id)
     }
 }
 
-void DArrayFree(DArray* arr)
+void DArrayFree(DArray* arr, MainModel* model)
 {
     for (int i = 0; i < arr->size; i++) {
-        DAFreeNode(arr->buffer[i]);
+        DAFreeNode(arr->buffer[i], model);
     }
     free(arr->buffer);
+    free(arr);
 }

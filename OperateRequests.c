@@ -17,9 +17,9 @@ kErrors ParseRequests(int argsc, char** args, MainModel* model) {
 	char* time_data = (char*)malloc(1024);
 	char* cur_string = (char*)malloc(4096);
 	char* time_time = (char*)malloc(128);
-	int priority;
 	char* id = (char*)malloc(256);
 	char* text = (char*)malloc(4096);
+	int priority;	
 	int count = 0;
 	int r_id = 0;
 	model->pending_requests = (queue_req*)malloc(sizeof(queue_req));
@@ -59,6 +59,11 @@ kErrors ParseRequests(int argsc, char** args, MainModel* model) {
 		fclose(cur_file);
 	}
 	qsort(model->pending_requests->buffer, model->pending_requests->size, sizeof(Request*), RequestComparator);
+	free(time_data);
+	free(cur_string);
+	free(time_time);
+	free(id);
+	free(text);
 	return status;
 }
 
@@ -198,4 +203,6 @@ kErrors SimulateModel(MainModel* model, FILE* out) {
 			break;
 		}
 	}
+	free(t);
+	return SUCCESS;
 }

@@ -23,6 +23,7 @@
 #include "OpsAndDeps.h"
 #include "OperateRequests.h"
 #include "vector.h"
+#include "Generics.h"
 
 
 
@@ -30,6 +31,7 @@
 
 int main(int argsc, char** args) {
 	srand(time(NULL));
+	kErrors status = SUCCESS;
 	int max_priority;
 	ReqStoreType req_store_type;
 	DepStoreType dep_store_type;
@@ -40,12 +42,25 @@ int main(int argsc, char** args) {
 	int deps_count;
 	MainModel main_model;	
 	int a = strcmp("0", "1");
-	ParseInput(argsc, args, &max_priority, &req_store_type, &dep_store_type,
+	status = ParseInput(argsc, args, &max_priority, &req_store_type, &dep_store_type,
 		&modelling_start, &modelling_finished, &min_op_work, &max_op_work, &deps_count, &main_model);
-	ParseRequests(argsc, args, &main_model);
-	//DArrayPrint(main_model.departments_storage_structure);
+	if (status != SUCCESS) {
+		printf("%d\n", status);
+		return status;
+	}
+	status = ParseRequests(argsc, args, &main_model);
+	if (status != SUCCESS) {
+		printf("%d\n", status);
+		return status;
+	}
+
 	FILE* out = fopen("out.txt", "w");
-	SimulateModel(&main_model, out);
-	//BSTFreeTree((BST*)main_model.departments_storage_structure);
+	status = SimulateModel(&main_model, out);
+	if (status != SUCCESS) {
+		printf("%d\n", status);
+		return status;
+	}
+	GenericFreeAll(&main_model);
+	fclose(out);
 	return 0;
 }

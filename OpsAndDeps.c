@@ -106,3 +106,10 @@ void RequestPrint(Request* req) {
 	printf("Time get: %s, pr: %d, dep_id: %s, text: %s \n",
 		buffer, req->priority, req->dep_id, req->text);
 }
+
+void DepFree(Department* dep, MainModel* model) {
+	free(dep->dep_id);
+	GenericFreeReqStruct(dep->req_queue, model);
+	free(dep->operators);
+	free(dep);
+}

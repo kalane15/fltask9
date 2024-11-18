@@ -15,6 +15,8 @@ void queue_create(queue_req* q, int init_buff_size) {
 void queue_destroy(queue_req* q) {
 	q->size = 0;
 	q->first = 0;
+	free(q->buffer);
+	free(q);
 }
 
 bool queue_is_empty(queue_req* q) {

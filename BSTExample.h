@@ -12,15 +12,16 @@ typedef struct BSTNode {
 typedef struct BST {
 	BSTNode* root;
 	int (*cmpLess)(char*, char*);
+	MainModel* model;
 } BST;
 
-kErrors BSTCreate(BST* tree, int (*_cmp)(char*, char*));
+kErrors BSTCreate(BST* tree, int (*_cmp)(char*, char*), MainModel* model);
 
 BSTNode* BSTCreateNode(Department* data);
 
 kErrors BSTInsert(BST* tree, Department* data);
 
-void BSTFreeNode(BSTNode* node);
+void BSTFreeNode(BSTNode* node, MainModel* model);
 
 kErrors BSTDelete(BST* tree, char* id);
 
@@ -32,6 +33,6 @@ void BSTPrint(BST* p);
 
 Department* BSTSearch(BST* tree, char* id);
 
-void BSTFreeTreeRecursive(BSTNode* node);
+void BSTFreeTreeRecursive(BSTNode* node, MainModel* model);
 
-void BSTFreeTree(BST* tree);
+void BSTFree(BST* tree);

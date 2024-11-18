@@ -24,3 +24,9 @@ kErrors GenericCreateDepStruct(void* structure, MainModel* model);
 kErrors GenericInsert(void* structure, Department* dep, char* id, MainModel* model);
 
 kErrors GenericMeldReqPq(void* q_from, void* q_to, MainModel* model);
+
+void GenericFreeReqStruct(void* st, MainModel* model);
+
+void GenericFreeDepStruct(void* st, MainModel* model);
+
+void GenericFreeAll(MainModel* model);

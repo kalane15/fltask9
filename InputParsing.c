@@ -68,8 +68,8 @@ kErrors ParseTime(FILE* config, char* temp, time_t* model_start, time_t* model_f
 	}
 	finish = ConvertToTm(temp);
 
-	*model_start = _mkgmtime(&start);
-	*model_finished = _mkgmtime(&finish);
+	*model_start = gmtime(&start);
+	*model_finished = gmtime(&finish);
 	if (*model_finished == -1 || *model_start == -1) {
 		return INC_TIME;
 	}
@@ -108,11 +108,11 @@ kErrors ParseInput(int argsc, char** args, int* max_priority, ReqStoreType* req_
 		return INC_NUM_OF_ARGS;
 	}*/
 	kErrors status = SUCCESS;
-	status = StringToInt(args[1], max_priority);
+	status = StringToInt(/*args[1]*/"50", max_priority);
 	if (status != SUCCESS) {
 		return status;
 	}
-	FILE* config = fopen(args[2], "r");
+	FILE* config = fopen(/*args[2]*/"in.txt", "r");
 	if (config == NULL) {
 		return INC_FILE;
 	}
@@ -157,7 +157,7 @@ kErrors ParseInput(int argsc, char** args, int* max_priority, ReqStoreType* req_
 	}
 	
 	status = ParseDepsInfo(config, model, *max_priority, *min_op_work, *max_op_work, *deps_count);
-
-	fclose(config);
+	free(temp);
+	fclose(config);	
 	return SUCCESS;
 }
