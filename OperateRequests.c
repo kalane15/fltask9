@@ -40,7 +40,6 @@ kErrors ParseRequests(int argsc, char** args, MainModel* model) {
 		while (fgets(cur_string, 4096, cur_file) != NULL) {
 			count = sscanf(cur_string, "%s %s %d %s ''%s''", time_data, time_time, &priority, id, text);
 			if (count != 5) {
-				status = INC_INP_DATA;
 				break;
 			}
 			strcat(time_data, " ");

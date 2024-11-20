@@ -68,6 +68,7 @@ kErrors RequestCreate(int priority, char* id, char* text, char* time, Request** 
 
 kErrors RequestCopy(Request** dest, Request* source) {
 	if (source == NULL) {
+		*dest = NULL;
 		return SUCCESS;
 	}
 	*dest = (Request*)malloc(sizeof(Request));

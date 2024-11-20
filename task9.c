@@ -24,12 +24,39 @@
 #include "OperateRequests.h"
 #include "vector.h"
 #include "Generics.h"
+#include "BinomialHeap.h"
 
 
 
 
 
 int main(int argsc, char** args) {
+	BinomialHeapPriorityQueue pq;
+	BinomialHeapCreatePriorityQueue(&pq, cmpMax);
+	BinomialHeapInsert(&pq, 1, NULL);
+	printf("");
+	BinomialHeapInsert(&pq, 2, NULL);
+	BinomialHeapInsert(&pq, 9, NULL);
+	
+	BinomialHeapInsert(&pq, 10, NULL);
+	
+	BinomialHeapInsert(&pq, 14, NULL);
+	BinomialHeapInsert(&pq, 15, NULL);
+	
+	Request* req;
+	BinomialHeapPrint(&pq);
+	BinomialHeapDeleteMax(&pq, &req);
+	BinomialHeapPrint(&pq);
+	BinomialHeapDeleteMax(&pq, &req);
+	BinomialHeapPrint(&pq);
+	BinomialHeapDeleteMax(&pq, &req);
+	BinomialHeapPrint(&pq);
+	BinomialHeapDeleteMax(&pq, &req);
+	BinomialHeapPrint(&pq);
+	BinomialHeapDeleteMax(&pq, &req);
+	BinomialHeapPrint(&pq);
+	BinomialHeapFree(&pq);
+	return 0;
 	srand(time(NULL));
 	kErrors status = SUCCESS;
 	int max_priority;

@@ -68,8 +68,8 @@ kErrors ParseTime(FILE* config, char* temp, time_t* model_start, time_t* model_f
 	}
 	finish = ConvertToTm(temp);
 
-	*model_start = gmtime(&start);
-	*model_finished = gmtime(&finish);
+	*model_start = _mkgmtime(&start);
+	*model_finished = _mkgmtime(&finish);
 	if (*model_finished == -1 || *model_start == -1) {
 		return INC_TIME;
 	}
