@@ -161,10 +161,11 @@ kErrors SimulateModel(MainModel* model, FILE* out) {
 	Department* last_dep_modifyed = NULL;
 	Department* dep_moved_to = NULL;
 
-	while (true) {
+	while (true) {		
 		gmtime_s(t, &model->current_time);
 		strftime(time_string, 1024, "%Y-%m-%d %H:%M:%S", t);
 		cur_req = queue_front(model->pending_requests);
+		printf("%s\n", time_string);
 		while(model->pending_requests->size > 0 && 
 			difftime(model->current_time, _mkgmtime(&cur_req->req_time_get)) >= 0 &&
 			model->pending_requests->size > 0) {	

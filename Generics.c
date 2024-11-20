@@ -40,6 +40,13 @@ kErrors GenericInsertRequest(MainModel* model, Request* req, Department** found_
 			}
 			dep->requests_in_queue++;
 			break;
+		case BINOMIAL_HEAP:
+			status = BinomialHeapInsert((BinomialHeapPriorityQueue*)dep->req_queue, req->priority, req);
+			if (status != SUCCESS) {
+				return status;
+			}
+			dep->requests_in_queue++;
+			break;
 	}
 	*found_dep = dep;
 	return SUCCESS;
@@ -53,6 +60,8 @@ void* GenericMallocReqQueue(MainModel* model) {
 			return malloc(sizeof(SkewHeapPriorityQueue));
 		case LEFTIST_HEAP:
 			return malloc(sizeof(LeftistHeapPriorityQueue));
+		case BINOMIAL_HEAP:
+			return malloc(sizeof(BinomialHeapPriorityQueue));
 	}
 	return NULL;
 }
@@ -75,6 +84,8 @@ kErrors GenericCreatePQ(void* queue, bool cmpMax(int a, int b), MainModel* model
 			return BinaryHeapCreatePriorityQueue(10, (BinaryHeapPriorityQueue*)queue, cmpMax);
 		case LEFTIST_HEAP:
 			return LeftistHeapCreatePriorityQueue((LeftistHeapPriorityQueue*)queue, cmpMax);
+		case BINOMIAL_HEAP:
+			return BinomialHeapCreatePriorityQueue((BinomialHeapPriorityQueue*)queue, cmpMax);
 	}
 	return INC_INP_DATA;
 }
@@ -87,6 +98,8 @@ kErrors GenericDeleteMax(void* req_queue, Request** out, MainModel* model) {
 			return BinaryHeapDeleteMax((BinaryHeapPriorityQueue*)req_queue, out);
 		case LEFTIST_HEAP:
 			return LeftistHeapDeleteMax((LeftistHeapPriorityQueue*)req_queue, out);
+		case BINOMIAL_HEAP:
+			return BinomialHeapDeleteMax((BinomialHeapPriorityQueue*)req_queue, out);
 	}
 	return INC_INP_DATA;
 }
@@ -119,18 +132,26 @@ kErrors GenericMeldReqPq(void* q_from, void* q_to, MainModel* model) {
 			return LeftistHeapMeld((LeftistHeapPriorityQueue*)q_from, (LeftistHeapPriorityQueue*)q_to);
 		case BINARY_HEAP:
 			return BinaryHeapMeld((BinaryHeapPriorityQueue*)q_from, (BinaryHeapPriorityQueue*)q_to);
+		case BINOMIAL_HEAP:
+			return BinomialHeapMeld((BinomialHeapPriorityQueue*)q_from, (BinomialHeapPriorityQueue*)q_to);
 	}
 	return INC_INP_DATA;
 }
 
-void GenericFreeReqStruct(void* st, MainModel* model) {
-	switch (model->req_store_type) {
+void GenericFreeReqStruct(void* st, ReqStoreType type) {
+	switch (type) {
 	case SKEW_HEAP:
 		SkewHeapFree((SkewHeapPriorityQueue*)st);
+		break;
 	case LEFTIST_HEAP:
 		LeftistHeapFreePriorityQueue((LeftistHeapPriorityQueue*)st);
+		break;
 	case BINARY_HEAP:
 		BinaryHeapFreePriorityQueue((BinaryHeapPriorityQueue*)st);
+		break;
+	case BINOMIAL_HEAP:
+		BinomialHeapFree((BinomialHeapPriorityQueue*)st);
+		break;
 	}
 	return INC_INP_DATA;
 }

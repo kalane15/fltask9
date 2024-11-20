@@ -54,4 +54,4 @@ kErrors RequestCopy(Request** dest, Request* source);
 void RequestFree(Request* req);
 void RequestPrint(Request* req);
 
-void DepFree(Department* dep, MainModel* model);
+void DepFree(Department* dep, ReqStoreType model);

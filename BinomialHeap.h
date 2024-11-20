@@ -43,6 +43,8 @@ void BinomialHeapFreeTree(BinomialTree* tree);
 
 void BinomialHeapFree(BinomialHeapPriorityQueue* heap);
 
+void BinomialHeapFreeFromTree(BinomialTree* tree);
+
 kErrors BinomialHeapCopyOneTree(BinomialTree** dest, BinomialTree* source);
 
 kErrors BinomialHeapCopyFromTree(BinomialTree** dest, BinomialTree* source);
@@ -52,3 +54,5 @@ kErrors BinomialHeapCopy(BinomialHeapNode** dest, BinomialHeapNode* source);
 void PrintChildren(BinomialHeapNode* node);
 
 void BinomialHeapPrint(BinomialHeapPriorityQueue* pq);
+
+kErrors BinomialHeapMeld(BinomialHeapPriorityQueue* p_in, BinomialHeapPriorityQueue* p_out);

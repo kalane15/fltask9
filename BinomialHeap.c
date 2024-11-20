@@ -161,10 +161,10 @@ kErrors BinomialHeapInsert(BinomialHeapPriorityQueue* heap, int key, Request* da
 
     BinomialTree* tmp = NULL;
     BinomialHeapMergeByRootsWithCopy(heap->root, tree, &tmp, heap->cmp);
-    BinomialHeapFreeTree(heap->root);
+    BinomialHeapFreeFromTree(heap->root);
     heap->root = tmp;
 
-    BinomialHeapFreeTree(tree);
+    BinomialHeapFreeFromTree(tree);
     heap->size++;
     return SUCCESS;
 }
@@ -208,26 +208,29 @@ kErrors BinomialHeapDeleteMax(BinomialHeapPriorityQueue* heap, Request** data) {
             max = min_root_tree->head->children[0];
         }        
         BinomialHeapCreateTree(&new_tree, max);
-        free(min_root_tree->head);
+        DepFree(min_root_tree->head->data, BINOMIAL_HEAP);
+        free(min_root_tree->head->children);
+        free(min_root_tree->head);        
         min_root_tree->head = min;
         new_tree->sibling = min_root_tree->sibling == NULL ? NULL : min_root_tree->sibling->sibling;
         min_root_tree->sibling = new_tree;
         min_root_tree->degree = min_root_tree->head->children_size;
         BinomialHeapMergeByRootsWithCopy(min_root_tree, heap->root, &tmp, heap->cmp);
-        BinomialHeapFreeTree(heap->root);
-        BinomialHeapFreeTree(min_root_tree);
-        BinomialHeapFreeTree(new_tree);
+        BinomialHeapFreeFromTree(heap->root);
+        BinomialHeapFreeFromTree(min_root_tree);
         heap->root = tmp;
     }
     else if (min_root_tree->head->children_size == 1) {
         min = min_root_tree->head->children[0];
+        DepFree(min_root_tree->head->data, BINOMIAL_HEAP);
+        free(min_root_tree->head->children);
         free(min_root_tree->head);
         min_root_tree->head = min;
         min_root_tree->degree = min_root_tree->head->children_size;
         min_root_tree->sibling = NULL;
         BinomialHeapMergeByRootsWithCopy(min_root_tree, heap->root, &tmp, heap->cmp);
-        BinomialHeapFreeTree(heap->root);
-        BinomialHeapFreeTree(min_root_tree);
+        BinomialHeapFreeFromTree(heap->root);
+        BinomialHeapFreeFromTree(min_root_tree);
         heap->root = tmp;        
     }
     else {
@@ -262,6 +265,8 @@ kErrors BinomialHeapDeleteMax(BinomialHeapPriorityQueue* heap, Request** data) {
 //    return SUCCESS;
 //}
 //
+
+
 void BinomialHeapFreeRecursively(BinomialHeapNode* node) {
     if (node == NULL) {
         return;
@@ -269,6 +274,7 @@ void BinomialHeapFreeRecursively(BinomialHeapNode* node) {
     for (int i = 0; i < node->children_size; i++) {
         BinomialHeapFreeRecursively(node->children[i]);
     }
+    DepFree(node->data, BINOMIAL_HEAP);
     free(node->children);
     free(node);
 }
@@ -282,9 +288,13 @@ void BinomialHeapFreeTree(BinomialTree* tree) {
     free(tree);
 }
 void BinomialHeapFree(BinomialHeapPriorityQueue* heap) {
-    BinomialTree* cur = heap->root;
+    BinomialHeapFreeFromTree(heap->root);
+    free(heap);
+}
+void BinomialHeapFreeFromTree(BinomialTree* tree) {
+    BinomialTree* cur = tree;
     BinomialTree* tmp;
-    
+
     while (cur != NULL) {
         tmp = cur->sibling;
         BinomialHeapFreeTree(cur);
@@ -394,19 +404,19 @@ void BinomialHeapPrint(BinomialHeapPriorityQueue* pq) {
 //    SkewHeapPrintNodes(p->root, 0);
 //}
 //
-//kErrors SkewHeapMeld(SkewHeapPriorityQueue* p_in, SkewHeapPriorityQueue* p_out) {
-//    kErrors status = SUCCESS;
-//    SkewHeapNode* cur = NULL;
-//    Request* cur_req = NULL;
-//    while (p_in->size > 0) {
-//        status = SkewHeapDeleteMax(p_in, &cur_req);
-//        if (status != SUCCESS) {
-//            return status;
-//        }
-//        status = SkewHeapInsert(p_out, cur_req->priority, cur_req);
-//        if (status != SUCCESS) {
-//            return status;
-//        }
-//    }
-//    return SUCCESS;
-//}
+kErrors BinomialHeapMeld(BinomialHeapPriorityQueue* p_in, BinomialHeapPriorityQueue* p_out) {
+    kErrors status = SUCCESS;
+    BinomialHeapNode* cur = NULL;
+    Request* cur_req = NULL;
+    while (p_in->size > 0) {
+        status = BinomialHeapDeleteMax(p_in, &cur_req);
+        if (status != SUCCESS) {
+            return status;
+        }
+        status = BinomialHeapInsert(p_out, cur_req->priority, cur_req);
+        if (status != SUCCESS) {
+            return status;
+        }
+    }
+    return SUCCESS;
+}

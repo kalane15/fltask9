@@ -59,7 +59,7 @@ kErrors DArrayInsert(DArray* arr, Department* data, const char* id)
 void DAFreeNode(DANode* node, MainModel* model)
 {
     free(node->id);
-    DepFree(node->data, model);
+    DepFree(node->data, model->req_store_type);
     free(node);
 }
 

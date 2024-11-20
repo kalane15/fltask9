@@ -108,9 +108,9 @@ void RequestPrint(Request* req) {
 		buffer, req->priority, req->dep_id, req->text);
 }
 
-void DepFree(Department* dep, MainModel* model) {
+void DepFree(Department* dep, ReqStoreType type) {
 	free(dep->dep_id);
-	GenericFreeReqStruct(dep->req_queue, model);
+	GenericFreeReqStruct(dep->req_queue, type);
 	free(dep->operators);
 	free(dep);
 }

@@ -53,7 +53,7 @@ kErrors BSTInsert(BST* tree, Department* data) {
 }
 
 void BSTFreeNode(BSTNode* node, MainModel* model) {
-	DepFree(node->data, model);
+	DepFree(node->data, model->req_store_type);
 	free(node);
 }
 

@@ -6,6 +6,7 @@ typedef struct MainModel MainModel;
 #include <float.h>
 #include <stdbool.h>
 #include "BSTExample.h"
+#include "BinomialHeap.h"
 #include "Comparators.h"
 #include "DynamicArray.h"
 #include "time.h"
@@ -25,7 +26,7 @@ kErrors GenericInsert(void* structure, Department* dep, char* id, MainModel* mod
 
 kErrors GenericMeldReqPq(void* q_from, void* q_to, MainModel* model);
 
-void GenericFreeReqStruct(void* st, MainModel* model);
+void GenericFreeReqStruct(void* st, ReqStoreType model);
 
 void GenericFreeDepStruct(void* st, MainModel* model);
 
