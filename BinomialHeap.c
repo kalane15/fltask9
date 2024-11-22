@@ -120,6 +120,16 @@ kErrors BinomialHeapMergeByRootsWithCopy(BinomialTree* h1, BinomialTree* h2, Bin
         while ((*curH)->sibling != NULL) {
             if ((*curH)->degree == (*curH)->sibling->degree) {
                 flag = true;
+                if ((*curH)->head->children_size == (*curH)->head->children_capacity) {
+                    BinomialHeapNode** tmp = (*curH)->head->children;
+                    int new_capacity = (*curH)->head->children_capacity * 2;
+                    (*curH)->head->children = (BinomialHeapNode**)realloc((*curH)->head->children, new_capacity);
+                    if ((*curH)->head->children == NULL) {
+                        (*curH)->head->children = tmp;
+                        return MEM_ALLOC_ERR;
+                    }
+                    (*curH)->head->children_capacity = new_capacity;
+                }
                 (*curH)->head->children[(*curH)->head->children_size++] = (*curH)->sibling->head;
                 BinomialTree* tmp = (*curH)->sibling;
                 (*curH)->sibling = (*curH)->sibling->sibling;
@@ -136,19 +146,18 @@ kErrors BinomialHeapMergeByRootsWithCopy(BinomialTree* h1, BinomialTree* h2, Bin
 
 //
 //// Создание пустой очереди
-kErrors BinomialHeapCreatePriorityQueue(BinomialHeapPriorityQueue* out, bool (*inp_cmp)(int*, int*)) {
+kErrors BinomialHeapCreatePriorityQueue(BinomialHeapPQ* out, bool (*inp_cmp)(int*, int*)) {
     out->cmp = inp_cmp;
     out->root = NULL;
     out->size = 0;
     return SUCCESS;
 }
-//
-//// Добавление элемента в косую кучу
-kErrors BinomialHeapInsert(BinomialHeapPriorityQueue* heap, int key, Request* data) {
-    if (!heap) return INC_ARGS; // Пустая очередь
+
+kErrors BinomialHeapInsert(BinomialHeapPQ* heap, int key, Request* data) {
+    if (!heap) return INC_ARGS; 
 
     BinomialHeapNode* newNode = BinomialHeapCreateNode(key, data);
-    if (!newNode) return MEM_ALLOC_ERR; // Ошибка выделения памяти
+    if (!newNode) return MEM_ALLOC_ERR;
 
     BinomialTree* tree = (BinomialTree*)malloc(sizeof(BinomialTree));
     if (tree == NULL) {
@@ -168,27 +177,9 @@ kErrors BinomialHeapInsert(BinomialHeapPriorityQueue* heap, int key, Request* da
     heap->size++;
     return SUCCESS;
 }
-//
-//// Удаление максимального элемента (по ключу)
-//kErrors SkewHeapDeleteMax(SkewHeapPriorityQueue* heap, Request** data) {
-//    if (!heap || !heap->root) return INC_ARGS; // Пустая очередь
-//    kErrors status = SUCCESS;
-//    SkewHeapNode* root = heap->root;
-//    *data = root->data;
-//    SkewHeapNode* temp = NULL;
-//    // Слияние левого и правого поддеревьев
-//    status = SkewHeapMergeByRootsWithCopy(heap->root->left, heap->root->right, &temp, heap->cmp);
-//    if (status != SUCCESS) {
-//        return status;
-//    }
-//    heap->root = temp;
-//    SkewHeapFreeRecursively(root);
-//    heap->size--;
-//    return SUCCESS;
-//}
-//
-kErrors BinomialHeapDeleteMax(BinomialHeapPriorityQueue* heap, Request** data) {
-    if (!heap || !heap->root) return INC_ARGS; // Пустая очередь
+
+kErrors BinomialHeapDeleteMax(BinomialHeapPQ* heap, Request** data) {
+    if (!heap || !heap->root) return INC_ARGS; 
     kErrors status = SUCCESS;
     BinomialTree* min_root_tree = heap->root;
     RequestCopy(data, heap->root->head->data);
@@ -208,7 +199,7 @@ kErrors BinomialHeapDeleteMax(BinomialHeapPriorityQueue* heap, Request** data) {
             max = min_root_tree->head->children[0];
         }        
         BinomialHeapCreateTree(&new_tree, max);
-        DepFree(min_root_tree->head->data, BINOMIAL_HEAP);
+        RequestFree(min_root_tree->head->data, BINOMIAL_HEAP);
         free(min_root_tree->head->children);
         free(min_root_tree->head);        
         min_root_tree->head = min;
@@ -222,7 +213,7 @@ kErrors BinomialHeapDeleteMax(BinomialHeapPriorityQueue* heap, Request** data) {
     }
     else if (min_root_tree->head->children_size == 1) {
         min = min_root_tree->head->children[0];
-        DepFree(min_root_tree->head->data, BINOMIAL_HEAP);
+        RequestFree(min_root_tree->head->data, BINOMIAL_HEAP);
         free(min_root_tree->head->children);
         free(min_root_tree->head);
         min_root_tree->head = min;
@@ -238,34 +229,39 @@ kErrors BinomialHeapDeleteMax(BinomialHeapPriorityQueue* heap, Request** data) {
     }
     return SUCCESS;
 }
-//
-//// Поиск максимального элемента (по ключу)
-//kErrors SkewHeapGetMax(SkewHeapPriorityQueue* heap, SkewHeapNode* data) {
-//    if (!heap || !heap->root) return INC_ARGS; // Пустая очередь
-//
-//    *data = *(heap->root);
-//    return SUCCESS;
-//}
-//
-//
-////Слияние двух очередей с разрушением исходных
-//kErrors SkewHeapMergeWithDestruction(SkewHeapPriorityQueue* heap1, SkewHeapPriorityQueue* heap2, SkewHeapPriorityQueue* merged) {
-//    if (!heap1 || !heap2) return INC_ARGS;
-//    kErrors status = SUCCESS;
-//    if (status != SUCCESS) {
-//        return status;
-//    }
-//    status = SkewHeapMergeWithoutDestruction(heap1, heap2, merged);
-//    if (status != SUCCESS) {
-//        return status;
-//    }
-//    merged->size = heap1->size + heap2->size;
-//    SkewHeapFree(heap1);
-//    SkewHeapFree(heap2);
-//    return SUCCESS;
-//}
-//
 
+Request* BinomialHeapGetMax(BinomialHeapPQ* heap) {
+    if (!heap || !heap->root) return INC_ARGS;
+    return heap->root->head->data;
+}
+
+
+
+kErrors BinomialHeapMergeWithDestruction(BinomialHeapPQ* heap1, BinomialHeapPQ* heap2, BinomialHeapPQ* merged) {
+    if (!heap1 || !heap2) return INC_ARGS;
+    kErrors status = SUCCESS;
+    if (status != SUCCESS) {
+        return status;
+    }
+    status = BinomialHeapMergeWithoutDestruction(heap1, heap2, merged);
+    if (status != SUCCESS) {
+        return status;
+    }
+    merged->size = heap1->size + heap2->size;
+    BinomialHeapFree(heap1);
+    BinomialHeapFree(heap2);
+    return SUCCESS;
+}
+
+
+kErrors BinomialHeapMergeWithoutDestruction(BinomialHeapPQ* pq1, BinomialHeapPQ* pq2, BinomialHeapPQ* merged) {
+    kErrors status = BinomialHeapMergeByRootsWithCopy(pq1->root, pq2->root, &(merged->root), pq1->cmp);
+    if (status != SUCCESS) {
+        return status;
+    }
+    merged->size = pq1->size + pq2->size;
+    return SUCCESS;
+}
 
 void BinomialHeapFreeRecursively(BinomialHeapNode* node) {
     if (node == NULL) {
@@ -274,7 +270,6 @@ void BinomialHeapFreeRecursively(BinomialHeapNode* node) {
     for (int i = 0; i < node->children_size; i++) {
         BinomialHeapFreeRecursively(node->children[i]);
     }
-    DepFree(node->data, BINOMIAL_HEAP);
     free(node->children);
     free(node);
 }
@@ -287,7 +282,7 @@ void BinomialHeapFreeTree(BinomialTree* tree) {
     BinomialHeapFreeRecursively(tree->head);
     free(tree);
 }
-void BinomialHeapFree(BinomialHeapPriorityQueue* heap) {
+void BinomialHeapFree(BinomialHeapPQ* heap) {
     BinomialHeapFreeFromTree(heap->root);
     free(heap);
 }
@@ -366,7 +361,7 @@ void PrintChildren(BinomialHeapNode* node) {
     printf("]");
 }
 
-void BinomialHeapPrint(BinomialHeapPriorityQueue* pq) {
+void BinomialHeapPrint(BinomialHeapPQ* pq) {
     BinomialTree* cur = pq->root;
     while (cur != NULL) {
         PrintChildren(cur->head);
@@ -374,37 +369,8 @@ void BinomialHeapPrint(BinomialHeapPriorityQueue* pq) {
         cur = cur->sibling;
     }
 }
-//
-//kErrors SkewHeapCopyPqFromRoot(SkewHeapPriorityQueue* dest, SkewHeapNode* source) {
-//    if (source == NULL) {
-//        return SUCCESS;
-//    }
-//    return SkewHeapCopy(&(dest->root), source);
-//}
-//
-//void SkewHeapPrintNode(SkewHeapNode* node) {
-//    char* buffer = (char*)malloc(1024);
-//    strftime(buffer, 1024, "%Y-%m-%d %H:%M:%S", &(node->data->req_time_get));
-//    printf("Time get: %s, pr: %d, dep_id: %s, text: %s \n",
-//        buffer, node->data->priority, node->data->dep_id, node->data->text);
-//}
-//
-//void SkewHeapPrintNodes(SkewHeapNode* root, int tab_count) {
-//    if (root != NULL)
-//    {
-//        SkewHeapPrintNodes(root->right, tab_count + 1);
-//        for (int i = 0; i < tab_count; ++i) { printf("\t"); }
-//        SkewHeapPrintNode(root);
-//        SkewHeapPrintNodes(root->left, tab_count + 1);
-//    }
-//}
-//
-//void SkewHeapPrint(SkewHeapPriorityQueue* p)
-//{
-//    SkewHeapPrintNodes(p->root, 0);
-//}
-//
-kErrors BinomialHeapMeld(BinomialHeapPriorityQueue* p_in, BinomialHeapPriorityQueue* p_out) {
+
+kErrors BinomialHeapMeld(BinomialHeapPQ* p_in, BinomialHeapPQ* p_out) {
     kErrors status = SUCCESS;
     BinomialHeapNode* cur = NULL;
     Request* cur_req = NULL;

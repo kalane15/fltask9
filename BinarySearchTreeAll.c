@@ -18,5 +18,5 @@
 #ifdef T  
 #undef T  
 #endif 
-#define T SkewHeapPriorityQueue
+#define T SkewHeapPQ
 #include "BinarySearchTreeAsTemplate.c"

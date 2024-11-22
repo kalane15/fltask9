@@ -38,7 +38,7 @@ LeftistHeapNode* LeftistHeapCreateNode(int key, TYPE data) {
     return node;
 }
 
-kErrors LeftistHeapCopyPqFromRoot(LeftistHeapPriorityQueue* dest, LeftistHeapNode* source) {
+kErrors LeftistHeapCopyPqFromRoot(LeftistHeapPQ* dest, LeftistHeapNode* source) {
     if (source == NULL) {
         return SUCCESS;
     }
@@ -91,7 +91,7 @@ LeftistHeapNode* LeftistHeapMerge(LeftistHeapNode* h1, LeftistHeapNode* h2, bool
 }
 
 // Функция для создания пустой левосторонней кучи
-kErrors LeftistHeapCreatePriorityQueue(LeftistHeapPriorityQueue* pq, bool (*inp_cmp)(int, int)) {
+kErrors LeftistHeapCreatePriorityQueue(LeftistHeapPQ* pq, bool (*inp_cmp)(int, int)) {
     pq->root = NULL;
     pq->cmp = inp_cmp;
     pq->size = 0;
@@ -99,7 +99,7 @@ kErrors LeftistHeapCreatePriorityQueue(LeftistHeapPriorityQueue* pq, bool (*inp_
 }
 
 // Вставка элемента в левостороннюю кучу
-kErrors LeftistHeapInsert(LeftistHeapPriorityQueue* pq, int key, TYPE data) {
+kErrors LeftistHeapInsert(LeftistHeapPQ* pq, int key, TYPE data) {
     LeftistHeapNode* newNode = LeftistHeapCreateNode(key, data);
     if (!newNode) return MEM_ALLOC_ERR;
 
@@ -111,7 +111,7 @@ kErrors LeftistHeapInsert(LeftistHeapPriorityQueue* pq, int key, TYPE data) {
 }
 
 // Удаление максимального элемента из кучи
-kErrors LeftistHeapDeleteMax(LeftistHeapPriorityQueue* pq, Request** max) {
+kErrors LeftistHeapDeleteMax(LeftistHeapPQ* pq, Request** max) {
     if (!pq->root) return INC_INP_DATA;  // Куча пуста
 
     LeftistHeapNode* root = pq->root;
@@ -125,7 +125,7 @@ kErrors LeftistHeapDeleteMax(LeftistHeapPriorityQueue* pq, Request** max) {
 }
 
 // Поиск максимального элемента в куче
-kErrors LeftistHeapGetMax(LeftistHeapPriorityQueue* pq, LeftistHeapNode** max) {
+kErrors LeftistHeapGetMax(LeftistHeapPQ* pq, LeftistHeapNode** max) {
     if (!pq->root) return INC_INP_DATA;  // Куча пуста
 
     *max = pq->root;
@@ -133,7 +133,7 @@ kErrors LeftistHeapGetMax(LeftistHeapPriorityQueue* pq, LeftistHeapNode** max) {
 }
 
 // Слияние двух очередей без разрушения исходных
-kErrors LeftistHeapMergeWithoutDestruction(LeftistHeapPriorityQueue* pq1, LeftistHeapPriorityQueue* pq2, LeftistHeapPriorityQueue* merged) {
+kErrors LeftistHeapMergeWithoutDestruction(LeftistHeapPQ* pq1, LeftistHeapPQ* pq2, LeftistHeapPQ* merged) {
     kErrors error = LeftistHeapCreatePriorityQueue(merged, pq1->cmp);
     if (error != SUCCESS) return error;
 
@@ -144,9 +144,9 @@ kErrors LeftistHeapMergeWithoutDestruction(LeftistHeapPriorityQueue* pq1, Leftis
 }
 
 // Слияние двух очередей с разрушением исходных
-kErrors LeftistHeapMergeWithDestruction(LeftistHeapPriorityQueue* pq1, LeftistHeapPriorityQueue* pq2) {
+kErrors LeftistHeapMergeWithDestruction(LeftistHeapPQ* pq1, LeftistHeapPQ* pq2) {
     kErrors status = SUCCESS; //TO DO: add copy res to merged
-    LeftistHeapPriorityQueue merged;
+    LeftistHeapPQ merged;
     status = LeftistHeapCreatePriorityQueue(&merged, pq1->cmp);
     if (status != SUCCESS) {
         return status;
@@ -181,7 +181,7 @@ void LeftistHeapRecursiveFree(LeftistHeapNode* node) {
 }
 
 // Освобождение памяти
-void LeftistHeapFreePriorityQueue(LeftistHeapPriorityQueue* pq) {
+void LeftistHeapFreePriorityQueue(LeftistHeapPQ* pq) {
     LeftistHeapRecursiveFree(pq->root);
 }
 
@@ -199,12 +199,12 @@ void LeftistHeapPrintNodes(LeftistHeapNode* root, int tab_count) {
     }
 }
 
-void LeftistHeapPrint(LeftistHeapPriorityQueue* p)
+void LeftistHeapPrint(LeftistHeapPQ* p)
 {
     LeftistHeapPrintNodes(p->root, 0);
 }
 
-kErrors LeftistHeapMeld(LeftistHeapPriorityQueue* p_in, LeftistHeapPriorityQueue* p_out) {
+kErrors LeftistHeapMeld(LeftistHeapPQ* p_in, LeftistHeapPQ* p_out) {
     kErrors status = SUCCESS;
     LeftistHeapNode* cur = NULL;
     Request* cur_req = NULL;

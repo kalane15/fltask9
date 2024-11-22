@@ -15,7 +15,7 @@ typedef enum ReqStoreType {
 } ReqStoreType;
 
 typedef enum DepStoreType {
-	HAST_SET,
+	HASH_SET,
 	DYNAMIC_ARRAY,
 	BINARY_SEARCH_TREE,
 	TRIE

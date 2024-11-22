@@ -1,0 +1,26 @@
+2026-09-01 12:31:01 NEW_REQUEST req_id: 2 dep_id: 0
+2026-09-01 12:31:01 REQUEST_HANDLING_STARTED req_id: 2 operator_num: 0
+2026-09-01 13:31:01 NEW_REQUEST req_id: 1 dep_id: 0
+2026-09-01 13:31:01, DEPARTMENT_OVERLOADED req_id: 1, requests were moved to dep with id: 1
+2026-09-01 14:27:01 REQUEST_HANDLING_FINISHED req_id: 2, time handling: 117  operator_id: 0
+2026-09-01 15:31:01 NEW_REQUEST req_id: 3 dep_id: 0
+2026-09-01 15:31:01 REQUEST_HANDLING_STARTED req_id: 3 operator_num: 0
+2026-09-01 15:31:01 REQUEST_HANDLING_STARTED req_id: 1 operator_num: 0
+2026-09-01 17:11:01 REQUEST_HANDLING_FINISHED req_id: 3, time handling: 101  operator_id: 0
+2026-09-01 17:11:01 REQUEST_HANDLING_FINISHED req_id: 1, time handling: 101  operator_id: 0
+2026-09-01 17:31:01 NEW_REQUEST req_id: 0 dep_id: 0
+2026-09-01 17:31:01 REQUEST_HANDLING_STARTED req_id: 0 operator_num: 0
+2026-09-01 18:31:01 NEW_REQUEST req_id: 6 dep_id: 1
+2026-09-01 18:31:01 REQUEST_HANDLING_STARTED req_id: 6 operator_num: 0
+2026-09-01 18:31:01 NEW_REQUEST req_id: 4 dep_id: 0
+2026-09-01 18:31:01, DEPARTMENT_OVERLOADED req_id: 4, requests were moved to dep with id: 1
+2026-09-01 19:19:01 REQUEST_HANDLING_FINISHED req_id: 0, time handling: 109  operator_id: 0
+2026-09-01 19:31:01 NEW_REQUEST req_id: 7 dep_id: 1
+2026-09-01 19:31:01 REQUEST_HANDLING_STARTED req_id: 7 operator_num: 1
+2026-09-01 19:31:01 REQUEST_HANDLING_STARTED req_id: 4 operator_num: 2
+2026-09-01 19:31:01 NEW_REQUEST req_id: 5 dep_id: 0
+2026-09-01 19:31:01 REQUEST_HANDLING_STARTED req_id: 5 operator_num: 0
+2026-09-01 20:28:01 REQUEST_HANDLING_FINISHED req_id: 6, time handling: 118  operator_id: 0
+2026-09-01 21:14:01 REQUEST_HANDLING_FINISHED req_id: 5, time handling: 104  operator_id: 0
+2026-09-01 21:17:01 REQUEST_HANDLING_FINISHED req_id: 7, time handling: 107  operator_id: 1
+2026-09-01 21:19:01 REQUEST_HANDLING_FINISHED req_id: 4, time handling: 109  operator_id: 2

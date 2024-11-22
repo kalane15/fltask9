@@ -21,7 +21,7 @@ typedef struct BinomialHeapPriorityQueue {
 	BinomialTree* root;
 	bool (*cmp)(int, int);
 	int size;
-} BinomialHeapPriorityQueue;
+} BinomialHeapPQ;
 
 BinomialHeapNode* BinomialHeapCreateNode(int key, Request* data);
 
@@ -29,19 +29,23 @@ kErrors BinomialHeapCreateTree(BinomialTree** out, BinomialHeapNode* node);
 
 kErrors BinomialHeapMergeByRootsWithCopy(BinomialTree* h1, BinomialTree* h2, BinomialTree** out, bool(*cmp)(int, int));
 
-kErrors BinomialHeapMergeByRootsWithCopy(BinomialHeapPriorityQueue* h1, BinomialHeapPriorityQueue* h2, BinomialHeapPriorityQueue** out, bool(*cmp)(int, int));
+kErrors BinomialHeapCreatePriorityQueue(BinomialHeapPQ* out, bool(*inp_cmp)(int*, int*));
 
-kErrors BinomialHeapCreatePriorityQueue(BinomialHeapPriorityQueue* out, bool(*inp_cmp)(int*, int*));
+kErrors BinomialHeapInsert(BinomialHeapPQ* heap, int key, Request* data);
 
-kErrors BinomialHeapInsert(BinomialHeapPriorityQueue* heap, int key, Request* data);
+kErrors BinomialHeapDeleteMax(BinomialHeapPQ* heap, Request** data);
 
-kErrors BinomialHeapDeleteMax(BinomialHeapPriorityQueue* heap, Request** data);
+Request* BinomialHeapGetMax(BinomialHeapPQ* heap);
+
+kErrors BinomialHeapMergeWithDestruction(BinomialHeapPQ* heap1, BinomialHeapPQ* heap2, BinomialHeapPQ* merged);
+
+kErrors BinomialHeapMergeWithoutDestruction(BinomialHeapPQ* pq1, BinomialHeapPQ* pq2, BinomialHeapPQ* merged);
 
 void BinomialHeapFreeRecursively(BinomialHeapNode* node);
 
 void BinomialHeapFreeTree(BinomialTree* tree);
 
-void BinomialHeapFree(BinomialHeapPriorityQueue* heap);
+void BinomialHeapFree(BinomialHeapPQ* heap);
 
 void BinomialHeapFreeFromTree(BinomialTree* tree);
 
@@ -53,6 +57,6 @@ kErrors BinomialHeapCopy(BinomialHeapNode** dest, BinomialHeapNode* source);
 
 void PrintChildren(BinomialHeapNode* node);
 
-void BinomialHeapPrint(BinomialHeapPriorityQueue* pq);
+void BinomialHeapPrint(BinomialHeapPQ* pq);
 
-kErrors BinomialHeapMeld(BinomialHeapPriorityQueue* p_in, BinomialHeapPriorityQueue* p_out);
+kErrors BinomialHeapMeld(BinomialHeapPQ* p_in, BinomialHeapPQ* p_out);

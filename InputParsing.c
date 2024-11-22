@@ -30,8 +30,8 @@ kErrors SwitchReqStoreType(char* s, ReqStoreType* req_store_type) {
 }
 
 kErrors SwitchDepStoreType(char* s, DepStoreType* req_store_type) {
-	if (strcmp(s, "HAST_SET") == 0) {
-		*req_store_type = HAST_SET;
+	if (strcmp(s, "HASH_SET") == 0) {
+		*req_store_type = HASH_SET;
 		return SUCCESS;
 	}
 	if (strcmp(s, "DYNAMIC_ARRAY") == 0) {

@@ -11,10 +11,10 @@ typedef struct {
 
 // Структура для приоритетной очереди (бинарной кучи)
 typedef struct {
-    BinaryHeapNode* heap;  // Массив элементов кучи
-    bool (*cmp)(int, int);
-    int size;                 // Текущий размер кучи
-    int capacity;             // Вместимость кучи    
+	BinaryHeapNode* heap;  // Массив элементов кучи
+	bool (*cmp)(int, int);
+	int size;      // Текущий размер кучи
+	int capacity;  // Вместимость кучи
 } BinaryHeapPriorityQueue;
 
 void BinaryHeapSwap(BinaryHeapNode* a, BinaryHeapNode* b);

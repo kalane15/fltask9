@@ -10,6 +10,9 @@ typedef struct MainModel MainModel;
 #include "Comparators.h"
 #include "DynamicArray.h"
 #include "time.h"
+#include "HashTable.h"
+#include "PrefixTree.h"
+#include "Treap.h"
 
 kErrors GenericInsertRequest(MainModel* model, Request* req, Department** dep);
 void* GenericMallocReqQueue(MainModel* model);

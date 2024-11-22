@@ -25,38 +25,28 @@
 #include "vector.h"
 #include "Generics.h"
 #include "BinomialHeap.h"
-
-
-
-
+#include "Treap.h"
 
 int main(int argsc, char** args) {
-	//BinomialHeapPriorityQueue pq;
-	//BinomialHeapCreatePriorityQueue(&pq, cmpMax);
-	//BinomialHeapInsert(&pq, 1, NULL);
-	//printf("");
-	//BinomialHeapInsert(&pq, 2, NULL);
-	//BinomialHeapInsert(&pq, 9, NULL);
-	//
-	//BinomialHeapInsert(&pq, 10, NULL);
-	//
-	//BinomialHeapInsert(&pq, 14, NULL);
-	//BinomialHeapInsert(&pq, 15, NULL);
-	//
-	//Request* req;
-	//BinomialHeapPrint(&pq);
-	//BinomialHeapDeleteMax(&pq, &req);
-	//BinomialHeapPrint(&pq);
-	//BinomialHeapDeleteMax(&pq, &req);
-	//BinomialHeapPrint(&pq);
-	//BinomialHeapDeleteMax(&pq, &req);
-	//BinomialHeapPrint(&pq);
-	//BinomialHeapDeleteMax(&pq, &req);
-	//BinomialHeapPrint(&pq);
-	//BinomialHeapDeleteMax(&pq, &req);
-	//BinomialHeapPrint(&pq);
-	//BinomialHeapFree(&pq);
-	//return 0;
+	BinomialHeapPQ* a = malloc(sizeof(BinomialHeapPQ));
+	BinomialHeapPQ* b = malloc(sizeof(BinomialHeapPQ));
+	BinomialHeapPQ* res = malloc(sizeof(BinomialHeapPQ));
+	BinomialHeapCreatePriorityQueue(a, CmpMax);
+	BinomialHeapCreatePriorityQueue(b, CmpMax);
+	BinomialHeapCreatePriorityQueue(res, CmpMax);
+
+	BinomialHeapInsert(a, 2, NULL);
+	BinomialHeapInsert(a, 5, NULL);
+	BinomialHeapInsert(a, 9, NULL);
+
+	BinomialHeapInsert(b, 3, NULL);
+	BinomialHeapInsert(b, 12, NULL);
+	BinomialHeapInsert(b, 6, NULL);
+
+	BinomialHeapMergeWithDestruction(a, b, res);
+	BinomialHeapPrint(res);
+	BinomialHeapFree(res);
+	return 0;
 	srand(time(NULL));
 	kErrors status = SUCCESS;
 	int max_priority;
@@ -67,8 +57,7 @@ int main(int argsc, char** args) {
 	int min_op_work;
 	int max_op_work; 
 	int deps_count;
-	MainModel main_model;	
-	int a = strcmp("0", "1");
+	MainModel main_model;
 	status = ParseInput(argsc, args, &max_priority, &req_store_type, &dep_store_type,
 		&modelling_start, &modelling_finished, &min_op_work, &max_op_work, &deps_count, &main_model);
 	if (status != SUCCESS) {

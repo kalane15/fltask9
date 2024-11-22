@@ -18,7 +18,7 @@ SkewHeapNode* SkewHeapCreateNode(int key, TYPESH* data) {
     return node;
 }
  
-kErrors SkewHeapMergeWithoutDestruction(SkewHeapPriorityQueue* pq1, SkewHeapPriorityQueue* pq2, SkewHeapPriorityQueue* merged) {
+kErrors SkewHeapMergeWithoutDestruction(SkewHeapPQ* pq1, SkewHeapPQ* pq2, SkewHeapPQ* merged) {
     kErrors status = SkewHeapMergeByRootsWithCopy(pq1->root, pq2->root, &(merged->root), pq1->cmp);
     if (status != SUCCESS) {
         return status;
@@ -64,7 +64,7 @@ kErrors SkewHeapMergeByRootsWithCopy(SkewHeapNode* h1, SkewHeapNode* h2, SkewHea
 }
 
 // Создание пустой очереди
-kErrors SkewHeapCreatePriorityQueue(SkewHeapPriorityQueue* out, bool (*inp_cmp)(SkewHeapNode*, SkewHeapNode*)) {
+kErrors SkewHeapCreatePriorityQueue(SkewHeapPQ* out, bool (*inp_cmp)(SkewHeapNode*, SkewHeapNode*)) {
     out->cmp = inp_cmp;
     out->root = NULL;
     out->size = 0;
@@ -72,7 +72,7 @@ kErrors SkewHeapCreatePriorityQueue(SkewHeapPriorityQueue* out, bool (*inp_cmp)(
 }
 
 // Добавление элемента в косую кучу
-kErrors SkewHeapInsert(SkewHeapPriorityQueue* heap, int key, TYPESH* data) {
+kErrors SkewHeapInsert(SkewHeapPQ* heap, int key, TYPESH* data) {
     if (!heap) return INC_ARGS; // Пустая очередь
 
     SkewHeapNode* newNode = SkewHeapCreateNode(key, data);
@@ -89,7 +89,7 @@ kErrors SkewHeapInsert(SkewHeapPriorityQueue* heap, int key, TYPESH* data) {
 }
 
 // Удаление максимального элемента (по ключу)
-kErrors SkewHeapDeleteMax(SkewHeapPriorityQueue* heap, Request** data) {
+kErrors SkewHeapDeleteMax(SkewHeapPQ* heap, Request** data) {
     if (!heap || !heap->root) return INC_ARGS; // Пустая очередь
     kErrors status = SUCCESS;
     SkewHeapNode* root = heap->root;
@@ -106,7 +106,7 @@ kErrors SkewHeapDeleteMax(SkewHeapPriorityQueue* heap, Request** data) {
     return SUCCESS;
 }
 
-kErrors SkewHeapDeleteMaxOutNode(SkewHeapPriorityQueue* heap, SkewHeapNode** data) {
+kErrors SkewHeapDeleteMaxOutNode(SkewHeapPQ* heap, SkewHeapNode** data) {
     if (!heap || !heap->root) return INC_ARGS; // Пустая очередь
     kErrors status = SUCCESS;
     SkewHeapNode* root = heap->root;
@@ -124,7 +124,7 @@ kErrors SkewHeapDeleteMaxOutNode(SkewHeapPriorityQueue* heap, SkewHeapNode** dat
 }
 
 // Поиск максимального элемента (по ключу)
-kErrors SkewHeapGetMax(SkewHeapPriorityQueue* heap, SkewHeapNode* data) {
+kErrors SkewHeapGetMax(SkewHeapPQ* heap, SkewHeapNode* data) {
     if (!heap || !heap->root) return INC_ARGS; // Пустая очередь
 
     *data = *(heap->root);
@@ -133,7 +133,7 @@ kErrors SkewHeapGetMax(SkewHeapPriorityQueue* heap, SkewHeapNode* data) {
 
 
  //Слияние двух очередей с разрушением исходных
-kErrors SkewHeapMergeWithDestruction(SkewHeapPriorityQueue* heap1, SkewHeapPriorityQueue* heap2, SkewHeapPriorityQueue* merged) {
+kErrors SkewHeapMergeWithDestruction(SkewHeapPQ* heap1, SkewHeapPQ* heap2, SkewHeapPQ* merged) {
     if (!heap1 || !heap2) return INC_ARGS;
     kErrors status = SUCCESS;
     if (status != SUCCESS) {
@@ -158,7 +158,7 @@ void SkewHeapFreeRecursively(SkewHeapNode* node) {
     free(node);
 }
 
-void SkewHeapFree(SkewHeapPriorityQueue* heap) {
+void SkewHeapFree(SkewHeapPQ* heap) {
     if (!heap) return;
     SkewHeapFreeRecursively(heap->root);
 }
@@ -192,7 +192,7 @@ kErrors SkewHeapCopy(SkewHeapNode** dest, SkewHeapNode* source) {
     return status;
 }
 
-kErrors SkewHeapCopyPqFromRoot(SkewHeapPriorityQueue* dest, SkewHeapNode* source) {
+kErrors SkewHeapCopyPqFromRoot(SkewHeapPQ* dest, SkewHeapNode* source) {
     if (source == NULL) {
         return SUCCESS;
     }
@@ -216,12 +216,12 @@ void SkewHeapPrintNodes(SkewHeapNode* root, int tab_count) {
     }
 }
 
-void SkewHeapPrint(SkewHeapPriorityQueue* p)
+void SkewHeapPrint(SkewHeapPQ* p)
 {
     SkewHeapPrintNodes(p->root, 0);
 }
 
-kErrors SkewHeapMeld(SkewHeapPriorityQueue* p_in, SkewHeapPriorityQueue* p_out) {
+kErrors SkewHeapMeld(SkewHeapPQ* p_in, SkewHeapPQ* p_out) {
     kErrors status = SUCCESS;
     SkewHeapNode* cur = NULL;
     Request* cur_req = NULL;

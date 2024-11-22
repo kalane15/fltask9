@@ -16,10 +16,23 @@ kErrors GenericInsertRequest(MainModel* model, Request* req, Department** found_
 			if (dep == NULL) {
 				return NO_SUCH_EL;
 			}
+			break;
+		case HASH_SET:
+			dep = HashTableSearch((HashTable*)model->departments_storage_structure, req->dep_id);
+			if (dep == NULL) {
+				return NO_SUCH_EL;
+			}
+			break;
+		case TRIE:
+			dep = TrieSearch((Trie*)model->departments_storage_structure, req->dep_id);
+			if (dep == NULL) {
+				return NO_SUCH_EL;
+			}
+			break;
 	}
 	switch (model->req_store_type) {
 		case SKEW_HEAP:
-			status = SkewHeapInsert((SkewHeapPriorityQueue*)dep->req_queue, req->priority, req);
+			status = SkewHeapInsert((SkewHeapPQ*)dep->req_queue, req->priority, req);
 			if (status != SUCCESS) {
 				return status;
 			}
@@ -41,7 +54,14 @@ kErrors GenericInsertRequest(MainModel* model, Request* req, Department** found_
 			dep->requests_in_queue++;
 			break;
 		case BINOMIAL_HEAP:
-			status = BinomialHeapInsert((BinomialHeapPriorityQueue*)dep->req_queue, req->priority, req);
+			status = BinomialHeapInsert((BinomialHeapPQ*)dep->req_queue, req->priority, req);
+			if (status != SUCCESS) {
+				return status;
+			}
+			dep->requests_in_queue++;
+			break;
+		case TREAP:
+			status = TreapInsert((Treap*)dep->req_queue, req->priority, req);
 			if (status != SUCCESS) {
 				return status;
 			}
@@ -57,11 +77,13 @@ void* GenericMallocReqQueue(MainModel* model) {
 		case BINARY_HEAP:
 			return malloc(sizeof(BinaryHeapPriorityQueue));
 		case SKEW_HEAP:
-			return malloc(sizeof(SkewHeapPriorityQueue));
+			return malloc(sizeof(SkewHeapPQ));
 		case LEFTIST_HEAP:
 			return malloc(sizeof(LeftistHeapPriorityQueue));
 		case BINOMIAL_HEAP:
-			return malloc(sizeof(BinomialHeapPriorityQueue));
+			return malloc(sizeof(BinomialHeapPQ));
+		case TREAP:
+			return malloc(sizeof(Treap));
 	}
 	return NULL;
 }
@@ -72,6 +94,10 @@ void* GenericMallocDepStruct(MainModel* model) {
 			return malloc(sizeof(DArray));
 		case BINARY_SEARCH_TREE:
 			return malloc(sizeof(BST));
+		case HASH_SET:
+			return malloc(sizeof(HashTable));
+		case TRIE:
+			return malloc(sizeof(Trie));
 	}
 	return NULL;
 }
@@ -79,13 +105,15 @@ void* GenericMallocDepStruct(MainModel* model) {
 kErrors GenericCreatePQ(void* queue, bool cmpMax(int a, int b), MainModel* model) {
 	switch (model->req_store_type) {
 		case SKEW_HEAP:
-			return SkewHeapCreatePriorityQueue((SkewHeapPriorityQueue*)queue, cmpMax);
+			return SkewHeapCreatePriorityQueue((SkewHeapPQ*)queue, cmpMax);
 		case BINARY_HEAP:
 			return BinaryHeapCreatePriorityQueue(10, (BinaryHeapPriorityQueue*)queue, cmpMax);
 		case LEFTIST_HEAP:
 			return LeftistHeapCreatePriorityQueue((LeftistHeapPriorityQueue*)queue, cmpMax);
 		case BINOMIAL_HEAP:
-			return BinomialHeapCreatePriorityQueue((BinomialHeapPriorityQueue*)queue, cmpMax);
+			return BinomialHeapCreatePriorityQueue((BinomialHeapPQ*)queue, cmpMax);
+		case TREAP:
+			return TreapCreate((Treap*)queue);
 	}
 	return INC_INP_DATA;
 }
@@ -93,13 +121,15 @@ kErrors GenericCreatePQ(void* queue, bool cmpMax(int a, int b), MainModel* model
 kErrors GenericDeleteMax(void* req_queue, Request** out, MainModel* model) {
 	switch (model->req_store_type) {
 		case SKEW_HEAP:
-			return SkewHeapDeleteMax((SkewHeapPriorityQueue*)req_queue, out);
+			return SkewHeapDeleteMax((SkewHeapPQ*)req_queue, out);
 		case BINARY_HEAP:
 			return BinaryHeapDeleteMax((BinaryHeapPriorityQueue*)req_queue, out);
 		case LEFTIST_HEAP:
 			return LeftistHeapDeleteMax((LeftistHeapPriorityQueue*)req_queue, out);
 		case BINOMIAL_HEAP:
-			return BinomialHeapDeleteMax((BinomialHeapPriorityQueue*)req_queue, out);
+			return BinomialHeapDeleteMax((BinomialHeapPQ*)req_queue, out);
+		case TREAP:
+			return TreapDeleteMax((Treap*)req_queue, out);
 	}
 	return INC_INP_DATA;
 }
@@ -110,6 +140,10 @@ kErrors GenericCreateDepStruct(void* structure, MainModel* model) {
 			return DArrayCreate((DArray*)structure, cmpDA, cmpId, model);
 		case BINARY_SEARCH_TREE:
 			return BSTCreate((BST*)structure, cmpId, model);
+		case HASH_SET:
+			return HashTableCreate((HashTable*)structure, model->deps_count);
+		case TRIE:
+			return TrieCreate((Trie*)structure);
 	}
 	return INC_INP_DATA;
 }
@@ -120,6 +154,10 @@ kErrors GenericInsert(void* structure, Department* dep, char* id, MainModel* mod
 			return DArrayInsert((DArray*)structure, dep, id);
 		case BINARY_SEARCH_TREE:
 			return BSTInsert((BST*)structure, dep);
+		case HASH_SET:
+			return HashTableInsert((HashTable*)structure, id, dep);
+		case TRIE:
+			return TrieInsert((Trie*)structure, id, dep);
 	}
 	return INC_INP_DATA;
 }
@@ -127,13 +165,15 @@ kErrors GenericInsert(void* structure, Department* dep, char* id, MainModel* mod
 kErrors GenericMeldReqPq(void* q_from, void* q_to, MainModel* model) {
 	switch (model->req_store_type) {
 		case SKEW_HEAP:
-			return SkewHeapMeld((SkewHeapPriorityQueue*)q_from, (SkewHeapPriorityQueue*)q_to);
+			return SkewHeapMeld((SkewHeapPQ*)q_from, (SkewHeapPQ*)q_to);
 		case LEFTIST_HEAP:
 			return LeftistHeapMeld((LeftistHeapPriorityQueue*)q_from, (LeftistHeapPriorityQueue*)q_to);
 		case BINARY_HEAP:
 			return BinaryHeapMeld((BinaryHeapPriorityQueue*)q_from, (BinaryHeapPriorityQueue*)q_to);
 		case BINOMIAL_HEAP:
-			return BinomialHeapMeld((BinomialHeapPriorityQueue*)q_from, (BinomialHeapPriorityQueue*)q_to);
+			return BinomialHeapMeld((BinomialHeapPQ*)q_from, (BinomialHeapPQ*)q_to);
+		case TREAP:
+			return TreapMeld((Treap*)q_from, (Treap*)q_to);
 	}
 	return INC_INP_DATA;
 }
@@ -141,7 +181,7 @@ kErrors GenericMeldReqPq(void* q_from, void* q_to, MainModel* model) {
 void GenericFreeReqStruct(void* st, ReqStoreType type) {
 	switch (type) {
 	case SKEW_HEAP:
-		SkewHeapFree((SkewHeapPriorityQueue*)st);
+		SkewHeapFree((SkewHeapPQ*)st);
 		break;
 	case LEFTIST_HEAP:
 		LeftistHeapFreePriorityQueue((LeftistHeapPriorityQueue*)st);
@@ -150,7 +190,10 @@ void GenericFreeReqStruct(void* st, ReqStoreType type) {
 		BinaryHeapFreePriorityQueue((BinaryHeapPriorityQueue*)st);
 		break;
 	case BINOMIAL_HEAP:
-		BinomialHeapFree((BinomialHeapPriorityQueue*)st);
+		BinomialHeapFree((BinomialHeapPQ*)st);
+		break;
+	case TREAP:
+		TreapFree((Treap*)st);
 		break;
 	}
 	return INC_INP_DATA;
@@ -162,6 +205,10 @@ void GenericFreeDepStruct(void* st, MainModel* model) {
 		return DArrayFree((DArray*)st, model);
 	case BINARY_SEARCH_TREE:
 		return BSTFree((BST*)st);
+	case HASH_SET:
+		return HashTableFree((HashTable*)st);
+	case TRIE:
+		return TrieFree((Trie*)st);
 	}
 }
 

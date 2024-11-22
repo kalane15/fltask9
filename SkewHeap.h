@@ -14,40 +14,40 @@ typedef struct SkewHeapPriorityQueue {
     SkewHeapNode* root;
     bool (*cmp)(int, int);
     int size;
-} SkewHeapPriorityQueue;
+} SkewHeapPQ;
 
 
 
 SkewHeapNode* SkewHeapCreateNode(int key, TYPESH* data);
 
-kErrors SkewHeapMergeWithoutDestruction(SkewHeapPriorityQueue* pq1, SkewHeapPriorityQueue* pq2, SkewHeapPriorityQueue* merged);
+kErrors SkewHeapMergeWithoutDestruction(SkewHeapPQ* pq1, SkewHeapPQ* pq2, SkewHeapPQ* merged);
 
 kErrors SkewHeapMergeByRootsWithCopy(SkewHeapNode* h1, SkewHeapNode* h2, SkewHeapNode** out, bool(*cmp)(SkewHeapNode*, SkewHeapNode*));
 
-kErrors SkewHeapCreatePriorityQueue(SkewHeapPriorityQueue* out, bool(*inp_cmp)(SkewHeapNode*, SkewHeapNode*));
+kErrors SkewHeapCreatePriorityQueue(SkewHeapPQ* out, bool(*inp_cmp)(SkewHeapNode*, SkewHeapNode*));
 
-kErrors SkewHeapInsert(SkewHeapPriorityQueue* heap, int key, TYPESH* data);
+kErrors SkewHeapInsert(SkewHeapPQ* heap, int key, TYPESH* data);
 
-kErrors SkewHeapDeleteMax(SkewHeapPriorityQueue* heap, Request** data);
+kErrors SkewHeapDeleteMax(SkewHeapPQ* heap, Request** data);
 
-kErrors SkewHeapDeleteMaxOutNode(SkewHeapPriorityQueue* heap, SkewHeapNode** data);
+kErrors SkewHeapDeleteMaxOutNode(SkewHeapPQ* heap, SkewHeapNode** data);
 
-kErrors SkewHeapGetMax(SkewHeapPriorityQueue* heap, SkewHeapNode* data);
+kErrors SkewHeapGetMax(SkewHeapPQ* heap, SkewHeapNode* data);
 
-kErrors SkewHeapMergeWithDestruction(SkewHeapPriorityQueue* heap1, SkewHeapPriorityQueue* heap2, SkewHeapPriorityQueue* merged);
+kErrors SkewHeapMergeWithDestruction(SkewHeapPQ* heap1, SkewHeapPQ* heap2, SkewHeapPQ* merged);
 
 void SkewHeapFreeRecursively(SkewHeapNode* node);
 
-void SkewHeapFree(SkewHeapPriorityQueue* heap);
+void SkewHeapFree(SkewHeapPQ* heap);
 
 kErrors SkewHeapCopy(SkewHeapNode** dest, SkewHeapNode* source);
 
-kErrors SkewHeapCopyPqFromRoot(SkewHeapPriorityQueue* dest, SkewHeapNode* source);
+kErrors SkewHeapCopyPqFromRoot(SkewHeapPQ* dest, SkewHeapNode* source);
 
 void SkewHeapPrintNode(SkewHeapNode* node);
 
 void SkewHeapPrintNodes(SkewHeapNode* root, int tab_count);
 
-void SkewHeapPrint(SkewHeapPriorityQueue* p);
+void SkewHeapPrint(SkewHeapPQ* p);
 
-kErrors SkewHeapMeld(SkewHeapPriorityQueue* p_in, SkewHeapPriorityQueue* p_out);
+kErrors SkewHeapMeld(SkewHeapPQ* p_in, SkewHeapPQ* p_out);
