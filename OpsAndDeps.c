@@ -6,7 +6,7 @@
 #include "Comparators.h"
 #include "mylib.h"
 #include "Generics.h"
-typedef struct Request Request;
+
 
 kErrors DepCreate(int op_count, int overload_coeff, Department** out, char* id, MainModel* model) {
 	kErrors status = SUCCESS;

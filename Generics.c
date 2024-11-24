@@ -39,7 +39,7 @@ kErrors GenericInsertRequest(MainModel* model, Request* req, Department** found_
 			dep->requests_in_queue++;
 			break;
 		case LEFTIST_HEAP:
-			status = LeftistHeapInsert((LeftistHeapPriorityQueue*)dep->req_queue, req->priority, req);
+			status = LeftistHeapInsert((LeftistHeapPQ*)dep->req_queue, req->priority, req);
 			if (status != SUCCESS) {
 				return status;
 			}
@@ -67,6 +67,13 @@ kErrors GenericInsertRequest(MainModel* model, Request* req, Department** found_
 			}
 			dep->requests_in_queue++;
 			break;
+		case FIB_HEAP:
+			status = FibHeapInsert((FibHeapPQ*)dep->req_queue, req->priority, req);
+			if (status != SUCCESS) {
+				return status;
+			}
+			dep->requests_in_queue++;
+			break;
 	}
 	*found_dep = dep;
 	return SUCCESS;
@@ -79,11 +86,13 @@ void* GenericMallocReqQueue(MainModel* model) {
 		case SKEW_HEAP:
 			return malloc(sizeof(SkewHeapPQ));
 		case LEFTIST_HEAP:
-			return malloc(sizeof(LeftistHeapPriorityQueue));
+			return malloc(sizeof(LeftistHeapPQ));
 		case BINOMIAL_HEAP:
 			return malloc(sizeof(BinomialHeapPQ));
 		case TREAP:
 			return malloc(sizeof(Treap));
+		case FIB_HEAP:
+			return malloc(sizeof(FibHeapPQ));
 	}
 	return NULL;
 }
@@ -109,11 +118,13 @@ kErrors GenericCreatePQ(void* queue, bool cmpMax(int a, int b), MainModel* model
 		case BINARY_HEAP:
 			return BinaryHeapCreatePriorityQueue(10, (BinaryHeapPriorityQueue*)queue, cmpMax);
 		case LEFTIST_HEAP:
-			return LeftistHeapCreatePriorityQueue((LeftistHeapPriorityQueue*)queue, cmpMax);
+			return LeftistHeapCreatePriorityQueue((LeftistHeapPQ*)queue, cmpMax);
 		case BINOMIAL_HEAP:
 			return BinomialHeapCreatePriorityQueue((BinomialHeapPQ*)queue, cmpMax);
 		case TREAP:
 			return TreapCreate((Treap*)queue);
+		case FIB_HEAP:
+			return FibHeapCreate((FibHeapPQ*)queue);
 	}
 	return INC_INP_DATA;
 }
@@ -125,11 +136,13 @@ kErrors GenericDeleteMax(void* req_queue, Request** out, MainModel* model) {
 		case BINARY_HEAP:
 			return BinaryHeapDeleteMax((BinaryHeapPriorityQueue*)req_queue, out);
 		case LEFTIST_HEAP:
-			return LeftistHeapDeleteMax((LeftistHeapPriorityQueue*)req_queue, out);
+			return LeftistHeapDeleteMax((LeftistHeapPQ*)req_queue, out);
 		case BINOMIAL_HEAP:
 			return BinomialHeapDeleteMax((BinomialHeapPQ*)req_queue, out);
 		case TREAP:
 			return TreapDeleteMax((Treap*)req_queue, out);
+		case FIB_HEAP:
+			return FibHeapDeleteMax((FibHeapPQ*)req_queue, out);
 	}
 	return INC_INP_DATA;
 }
@@ -167,13 +180,15 @@ kErrors GenericMeldReqPq(void* q_from, void* q_to, MainModel* model) {
 		case SKEW_HEAP:
 			return SkewHeapMeld((SkewHeapPQ*)q_from, (SkewHeapPQ*)q_to);
 		case LEFTIST_HEAP:
-			return LeftistHeapMeld((LeftistHeapPriorityQueue*)q_from, (LeftistHeapPriorityQueue*)q_to);
+			return LeftistHeapMeld((LeftistHeapPQ*)q_from, (LeftistHeapPQ*)q_to);
 		case BINARY_HEAP:
 			return BinaryHeapMeld((BinaryHeapPriorityQueue*)q_from, (BinaryHeapPriorityQueue*)q_to);
 		case BINOMIAL_HEAP:
 			return BinomialHeapMeld((BinomialHeapPQ*)q_from, (BinomialHeapPQ*)q_to);
 		case TREAP:
 			return TreapMeld((Treap*)q_from, (Treap*)q_to);
+		case FIB_HEAP:
+			return FibHeapMeld((FibHeapPQ*)q_from, (FibHeapPQ*)q_to);
 	}
 	return INC_INP_DATA;
 }
@@ -184,7 +199,7 @@ void GenericFreeReqStruct(void* st, ReqStoreType type) {
 		SkewHeapFree((SkewHeapPQ*)st);
 		break;
 	case LEFTIST_HEAP:
-		LeftistHeapFreePriorityQueue((LeftistHeapPriorityQueue*)st);
+		LeftistHeapFreePriorityQueue((LeftistHeapPQ*)st);
 		break;
 	case BINARY_HEAP:
 		BinaryHeapFreePriorityQueue((BinaryHeapPriorityQueue*)st);
@@ -195,8 +210,11 @@ void GenericFreeReqStruct(void* st, ReqStoreType type) {
 	case TREAP:
 		TreapFree((Treap*)st);
 		break;
+	case FIB_HEAP:
+		FibHeapFree((FibHeapPQ*)st);
+		break;
 	}
-	return INC_INP_DATA;
+	return;
 }
 
 void GenericFreeDepStruct(void* st, MainModel* model) {

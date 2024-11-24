@@ -26,27 +26,37 @@
 #include "Generics.h"
 #include "BinomialHeap.h"
 #include "Treap.h"
+#include "FibonacciHeap.h"
 
 int main(int argsc, char** args) {
-	BinomialHeapPQ* a = malloc(sizeof(BinomialHeapPQ));
-	BinomialHeapPQ* b = malloc(sizeof(BinomialHeapPQ));
-	BinomialHeapPQ* res = malloc(sizeof(BinomialHeapPQ));
-	BinomialHeapCreatePriorityQueue(a, CmpMax);
-	BinomialHeapCreatePriorityQueue(b, CmpMax);
-	BinomialHeapCreatePriorityQueue(res, CmpMax);
+	/*FibHeapPQ pq;
+	FibHeapCreate(&pq);
+	FibHeapInsert(&pq, 5, NULL);
+	FibHeapInsert(&pq, 2, NULL);
+	FibHeapInsert(&pq, 7, NULL);
+	FibHeapInsert(&pq, 10, NULL);
+	FibHeapInsert(&pq, 3, NULL);
+	FibHeapConsolidate(&pq);
+	FibHeapPrint(&pq);
+	printf("\n");
+	FibHeapPQ pq1;
+	FibHeapCreate(&pq1);
+	FibHeapInsert(&pq1, 3, NULL);
+	FibHeapInsert(&pq1, 8, NULL);
+	FibHeapInsert(&pq1, 1, NULL);
+	FibHeapInsert(&pq1, 20, NULL);
+	FibHeapInsert(&pq1, 30, NULL);
+	FibHeapConsolidate(&pq1);
+	FibHeapPrint(&pq1);
 
-	BinomialHeapInsert(a, 2, NULL);
-	BinomialHeapInsert(a, 5, NULL);
-	BinomialHeapInsert(a, 9, NULL);
+	FibHeapPQ* res = (FibHeapPQ*)malloc(sizeof(FibHeapPQ));
+	FibHeapCreate(res);
+	FibHeapMergeWithDestruction(&pq, &pq1, &res);
 
-	BinomialHeapInsert(b, 3, NULL);
-	BinomialHeapInsert(b, 12, NULL);
-	BinomialHeapInsert(b, 6, NULL);
-
-	BinomialHeapMergeWithDestruction(a, b, res);
-	BinomialHeapPrint(res);
-	BinomialHeapFree(res);
-	return 0;
+	printf("\n");
+	FibHeapPrint(res);
+	FibHeapFree(res);
+	return 0;*/
 	srand(time(NULL));
 	kErrors status = SUCCESS;
 	int max_priority;

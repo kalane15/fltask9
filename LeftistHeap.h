@@ -16,31 +16,31 @@ typedef struct {
   LeftistHeapNode* root;  // Корень кучи
   bool (*cmp)(int, int);
   int size;
-} LeftistHeapPriorityQueue;
+} LeftistHeapPQ;
 
 LeftistHeapNode* LeftistHeapCreateNode(int key, TYPE data);
 
 LeftistHeapNode* LeftistHeapMerge(LeftistHeapNode* h1, LeftistHeapNode* h2,
                                   bool (*cmp)(int, int));
 
-kErrors LeftistHeapCreatePriorityQueue(LeftistHeapPriorityQueue* pq,
+kErrors LeftistHeapCreatePriorityQueue(LeftistHeapPQ* pq,
                                        bool (*cmp)(int, int));
 
-kErrors LeftistHeapInsert(LeftistHeapPriorityQueue* pq, int key, TYPE data);
+kErrors LeftistHeapInsert(LeftistHeapPQ* pq, int key, TYPE data);
 
-kErrors LeftistHeapDeleteMax(LeftistHeapPriorityQueue* pq,
+kErrors LeftistHeapDeleteMax(LeftistHeapPQ* pq,
                              Request** max);
 
-kErrors LeftistHeapGetMax(LeftistHeapPriorityQueue* pq, LeftistHeapNode** max);
+kErrors LeftistHeapGetMax(LeftistHeapPQ* pq, LeftistHeapNode** max);
 
-kErrors LeftistHeapMergeWithDestruction(LeftistHeapPriorityQueue* pq1,
-                                        LeftistHeapPriorityQueue* pq2);
+kErrors LeftistHeapMergeWithDestruction(LeftistHeapPQ* pq1,
+                                        LeftistHeapPQ* pq2);
 
-void LeftistHeapFreePriorityQueue(LeftistHeapPriorityQueue* pq);
+void LeftistHeapFreePriorityQueue(LeftistHeapPQ* pq);
 
-void LeftistHeapPrint(LeftistHeapPriorityQueue* p);
-kErrors LeftistHeapMeld(LeftistHeapPriorityQueue* p_in, LeftistHeapPriorityQueue* p_out);
+void LeftistHeapPrint(LeftistHeapPQ* p);
+kErrors LeftistHeapMeld(LeftistHeapPQ* p_in, LeftistHeapPQ* p_out);
 void LeftistHeapPrintNodes(LeftistHeapNode* root, int tab_count);
 bool CmpMax(int a, int b);
 void LeftistHeapRecursiveFree(LeftistHeapNode* node);
-kErrors LeftistHeapCopyPqFromRoot(LeftistHeapPriorityQueue* dest, LeftistHeapNode* source);
+kErrors LeftistHeapCopyPqFromRoot(LeftistHeapPQ* dest, LeftistHeapNode* source);

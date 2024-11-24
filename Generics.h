@@ -13,6 +13,7 @@ typedef struct MainModel MainModel;
 #include "HashTable.h"
 #include "PrefixTree.h"
 #include "Treap.h"
+#include "FibonacciHeap.h"
 
 kErrors GenericInsertRequest(MainModel* model, Request* req, Department** dep);
 void* GenericMallocReqQueue(MainModel* model);

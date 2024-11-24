@@ -85,6 +85,7 @@ kErrors UpdateDepsAndOperators(MainModel* model, FILE* out) {
 			}
 		}	
 	}
+	return status;
 }
 
 
@@ -97,7 +98,7 @@ kErrors DistributeRequests(MainModel* model, FILE* out) {
 				if (deps[i]->operators[op].is_working == false) {
 					status = GenericDeleteMax(deps[i]->req_queue, &(deps[i]->operators[op].current_request), model);
 					if (status != SUCCESS) {
-						return status;
+						continue;
 					}
 					deps[i]->operators[op].is_working = true;
 
@@ -109,6 +110,7 @@ kErrors DistributeRequests(MainModel* model, FILE* out) {
 			}
 		}
 	}
+	return SUCCESS;
 }
 
 bool CheckOperators(MainModel* model) {
@@ -156,8 +158,15 @@ kErrors SimulateModel(MainModel* model, FILE* out) {
 	model->current_time = model->modelling_start;
 	Request* cur_req = NULL;
 	char* time_string = (char*)malloc(1024);
+	if (time_string == NULL) {
+		return MEM_ALLOC_ERR;
+	}
 	model->current_time_string = time_string;
 	struct tm* t = (struct tm*)malloc(sizeof(struct tm));
+	if (t == NULL) {
+		free(time_string);
+		return MEM_ALLOC_ERR;
+	}
 	Department* last_dep_modifyed = NULL;
 	Department* dep_moved_to = NULL;
 	
@@ -174,12 +183,24 @@ kErrors SimulateModel(MainModel* model, FILE* out) {
 			status = GenericInsertRequest(model, cur_req, &last_dep_modifyed);
 			fprintf(out, "%s NEW_REQUEST req_id: %d dep_id: %s\n", time_string, cur_req->r_id, cur_req->dep_id);
 			if (status != SUCCESS) {
+				free(time_string);
+				free(t);
 				return status;
 			}
 			
-			DistributeRequests(model, out);
+			status = DistributeRequests(model, out);
+			if (status != SUCCESS) {
+				free(time_string);
+				free(t);
+				return status;
+			}
 			if (last_dep_modifyed->requests_in_queue >= last_dep_modifyed->op_count * last_dep_modifyed->overload_coeff) {
-				TryToMoveRequests(last_dep_modifyed, model, &dep_moved_to);
+				status = TryToMoveRequests(last_dep_modifyed, model, &dep_moved_to);
+				if (status != SUCCESS) {
+					free(time_string);
+					free(t);
+					return status;
+				}
 				if (dep_moved_to != NULL) {
 					fprintf(out, "%s, DEPARTMENT_OVERLOADED req_id: %d, requests were moved to dep with id: %s\n",
 						model->current_time_string, cur_req->r_id, dep_moved_to->dep_id);
@@ -197,6 +218,11 @@ kErrors SimulateModel(MainModel* model, FILE* out) {
 			cur_req = queue_front(model->pending_requests);
 		}
 		status = UpdateDepsAndOperators(model, out);
+		if (status != SUCCESS) {
+			free(time_string);
+			free(t);
+			return status;
+		}
 		model->current_time += 60;
 
 		if (difftime(model->current_time, model->modelling_finished) > 0) {

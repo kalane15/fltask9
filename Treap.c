@@ -11,8 +11,8 @@ kErrors TreapSplit(Treap* to_split, int key, Treap** l, Treap** r) {
 	return SUCCESS;
 }
 
-kErrors TreapCreateNode(node** out, int priority, Request* data) {
-	*out = (node*)malloc(sizeof(node));
+kErrors TreapCreateNode(TreapNode** out, int priority, Request* data) {
+	*out = (TreapNode*)malloc(sizeof(TreapNode));
 	if (*out == NULL) {
 		return MEM_ALLOC_ERR;
 	}
@@ -24,9 +24,9 @@ kErrors TreapCreateNode(node** out, int priority, Request* data) {
 	return SUCCESS;
 }
 
-int GetX(node* t) { return t == NULL ? 0 : t->x; }
+int GetX(TreapNode* t) { return t == NULL ? 0 : t->x; }
 
-void TreapSplitRecursive(node* t, int x0, node** l, node** r) {
+void TreapSplitRecursive(TreapNode* t, int x0, TreapNode** l, TreapNode** r) {
 	if (t == NULL) {
 		*l = NULL;
 		*r = NULL;
@@ -44,13 +44,13 @@ void TreapSplitRecursive(node* t, int x0, node** l, node** r) {
 	TreapNodeUpdate(t);
 }
 
-void TreapNodeUpdate(node* t) {
+void TreapNodeUpdate(TreapNode* t) {
 	if (t != NULL) {
 		t->x = 1 + GetX(t->left) + GetX(t->right);
 	}
 }
 
-node* TreapMergeRecursive(node* l, node* r) {
+TreapNode* TreapMergeRecursive(TreapNode* l, TreapNode* r) {
 	if (l == NULL) {
 		return r;
 	}
@@ -68,7 +68,7 @@ node* TreapMergeRecursive(node* l, node* r) {
 		return r;
 	}
 }
-kErrors TreapCopyNodes(node** dest, node* source) {
+kErrors TreapCopyNodes(TreapNode** dest, TreapNode* source) {
 	kErrors status = SUCCESS;
 	if (source == NULL) {
 		return SUCCESS;
@@ -78,7 +78,7 @@ kErrors TreapCopyNodes(node** dest, node* source) {
 		TreapFreeRecursive(*dest);
 	}
 
-	*dest = (node*)malloc(sizeof(node));
+	*dest = (TreapNode*)malloc(sizeof(TreapNode));
 	if ((*dest) == NULL) {
 		return MEM_ALLOC_ERR;
 	}
@@ -140,11 +140,11 @@ kErrors TreapMergeWithDestruction(Treap* t1, Treap* t2, Treap** merged) {
 	TreapFree(t2);
 }
 
-kErrors TreapInsertToRoot(node** root, int k, Request* data) {
-	node* l = NULL;
-	node* r = NULL;
+kErrors TreapInsertToRoot(TreapNode** root, int k, Request* data) {
+	TreapNode* l = NULL;
+	TreapNode* r = NULL;
 	TreapSplitRecursive(*root, k, &l, &r);
-	node* m = NULL;
+	TreapNode* m = NULL;
 	TreapCreateNode(&m, k, data);
 	*root = TreapMergeRecursive(TreapMergeRecursive(l, m), r);
 	return SUCCESS;
@@ -158,9 +158,10 @@ kErrors TreapInsert(Treap* treap, int p, Request* data) {
 
 void TreapFree(Treap* treap) {
 	TreapFreeRecursive(treap->root);
+	free(treap);
 }
 
-void TreapFreeRecursive(node* node) {
+void TreapFreeRecursive(TreapNode* node) {
 	if (node == NULL) {
 		return;
 	}
@@ -175,7 +176,7 @@ kErrors TreapDeleteMax(Treap* treap, Request** out) {
 		return INC_ARGS;
 	}
 	RequestCopy(out, treap->root->data);
-	node* tmp = treap->root;
+	TreapNode* tmp = treap->root;
 	treap->root = TreapMergeRecursive(treap->root->left, treap->root->right);
 	free(tmp);
 	treap->size--;
@@ -184,7 +185,7 @@ kErrors TreapDeleteMax(Treap* treap, Request** out) {
 
 kErrors TreapMeld(Treap* p_in, Treap* p_out) {
 	kErrors status = SUCCESS;
-	node* cur = NULL;
+	TreapNode* cur = NULL;
 	Request* cur_req = NULL;
 	while (p_in->size > 0) {
 		status = TreapDeleteMax(p_in, &cur_req);
@@ -199,12 +200,12 @@ kErrors TreapMeld(Treap* p_in, Treap* p_out) {
 	return SUCCESS;
 }
 
-void TreapPrintNode(node* root) {
+void TreapPrintNode(TreapNode* root) {
 	printf("%d\n", root->y);
 }
 
 
-void TreapPrintNodes(node* root, int tab_count) {
+void TreapPrintNodes(TreapNode* root, int tab_count) {
 	if (root != NULL)
 	{
 		TreapPrintNodes(root->right, tab_count + 1);

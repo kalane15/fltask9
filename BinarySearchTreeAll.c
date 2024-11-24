@@ -8,7 +8,7 @@
 #ifdef T 
 #undef T  
 #endif  
-#define T LeftistHeapPriorityQueue 
+#define T LeftistHeapPQ 
 #include "BinarySearchTreeAsTemplate.c"    
 #ifdef T  
 #undef T  
