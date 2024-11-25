@@ -220,13 +220,17 @@ void GenericFreeReqStruct(void* st, ReqStoreType type) {
 void GenericFreeDepStruct(void* st, MainModel* model) {
 	switch (model->dep_store_type) {
 	case DYNAMIC_ARRAY:
-		return DArrayFree((DArray*)st, model);
+		DArrayFree((DArray*)st, model); 
+		break;
 	case BINARY_SEARCH_TREE:
-		return BSTFree((BST*)st);
+		BSTFree((BST*)st);
+		break;
 	case HASH_SET:
-		return HashTableFree((HashTable*)st);
+		HashTableFree((HashTable*)st);
+		break;
 	case TRIE:
-		return TrieFree((Trie*)st);
+		TrieFree((Trie*)st);
+		break;
 	}
 }
 

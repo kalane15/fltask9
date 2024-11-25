@@ -15,7 +15,7 @@ typedef struct queue_req {
     int first;
     int buffer_size;
 } queue_req;
-void queue_create(queue_req *q, int init_buff_size);
+bool queue_create(queue_req *q, int init_buff_size);
 void queue_destroy(queue_req *q);
 bool queue_is_empty(queue_req *q);
 bool queue_push(queue_req *q, TYPE d);

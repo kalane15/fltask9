@@ -29,7 +29,7 @@ kErrors BinomialHeapCreateTree(BinomialTree** out, BinomialHeapNode* node);
 
 kErrors BinomialHeapMergeByRootsWithCopy(BinomialTree* h1, BinomialTree* h2, BinomialTree** out, bool(*cmp)(int, int));
 
-kErrors BinomialHeapCreatePriorityQueue(BinomialHeapPQ* out, bool(*inp_cmp)(int*, int*));
+kErrors BinomialHeapCreatePriorityQueue(BinomialHeapPQ* out, bool(*inp_cmp)(int, int));
 
 kErrors BinomialHeapInsert(BinomialHeapPQ* heap, int key, Request* data);
 

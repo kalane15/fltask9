@@ -3,7 +3,7 @@
 #include "time.h"
 #include "Generics.h"
 
-int RequestComparator(void* a, void* b) {
+int RequestComparator(void* const a, void* const b) {
 	Request** r1 = (Request**)a;
 	Request** r2 = (Request**)b;
 	int res = (int)difftime(_mkgmtime(&(*r1)->req_time_get), _mkgmtime(&(*r2)->req_time_get));
@@ -46,7 +46,10 @@ kErrors ParseRequests(int argsc, char** args, MainModel* model) {
 	}
 
 	if (status == SUCCESS) {
-		queue_create(model->pending_requests, 10);
+		bool bres = queue_create(model->pending_requests, 10);
+		if (!bres) {
+			return MEM_ALLOC_ERR;
+		}
 	}
 	for (int i = 3; i < argsc; i++) {
 		if (status != SUCCESS) {

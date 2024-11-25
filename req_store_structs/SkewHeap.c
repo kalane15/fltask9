@@ -64,7 +64,7 @@ kErrors SkewHeapMergeByRootsWithCopy(SkewHeapNode* h1, SkewHeapNode* h2, SkewHea
 }
 
 // Создание пустой очереди
-kErrors SkewHeapCreatePriorityQueue(SkewHeapPQ* out, bool (*inp_cmp)(SkewHeapNode*, SkewHeapNode*)) {
+kErrors SkewHeapCreatePriorityQueue(SkewHeapPQ* out, bool (*inp_cmp)(int, int)) {
     out->cmp = inp_cmp;
     out->root = NULL;
     out->size = 0;
@@ -201,6 +201,9 @@ kErrors SkewHeapCopyPqFromRoot(SkewHeapPQ* dest, SkewHeapNode* source) {
 
 void SkewHeapPrintNode(SkewHeapNode* node) {
     char* buffer = (char*)malloc(1024);
+    if (buffer == NULL) {
+        return;
+    }
     strftime(buffer, 1024, "%Y-%m-%d %H:%M:%S", &(node->data->req_time_get));
     printf("Time get: %s, pr: %d, dep_id: %s, text: %s \n", 
         buffer, node->data->priority, node->data->dep_id, node->data->text);

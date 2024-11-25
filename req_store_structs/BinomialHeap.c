@@ -141,12 +141,13 @@ kErrors BinomialHeapMergeByRootsWithCopy(BinomialTree* h1, BinomialTree* h2, Bin
             }
         }
     }
+    return SUCCESS;
 }
 
 
 //
 //// Создание пустой очереди
-kErrors BinomialHeapCreatePriorityQueue(BinomialHeapPQ* out, bool (*inp_cmp)(int*, int*)) {
+kErrors BinomialHeapCreatePriorityQueue(BinomialHeapPQ* out, bool (*inp_cmp)(int, int)) {
     out->cmp = inp_cmp;
     out->root = NULL;
     out->size = 0;
@@ -199,7 +200,7 @@ kErrors BinomialHeapDeleteMax(BinomialHeapPQ* heap, Request** data) {
             max = min_root_tree->head->children[0];
         }        
         BinomialHeapCreateTree(&new_tree, max);
-        RequestFree(min_root_tree->head->data, BINOMIAL_HEAP);
+        RequestFree(min_root_tree->head->data);
         free(min_root_tree->head->children);
         free(min_root_tree->head);        
         min_root_tree->head = min;
@@ -213,7 +214,7 @@ kErrors BinomialHeapDeleteMax(BinomialHeapPQ* heap, Request** data) {
     }
     else if (min_root_tree->head->children_size == 1) {
         min = min_root_tree->head->children[0];
-        RequestFree(min_root_tree->head->data, BINOMIAL_HEAP);
+        RequestFree(min_root_tree->head->data);
         free(min_root_tree->head->children);
         free(min_root_tree->head);
         min_root_tree->head = min;
@@ -231,7 +232,7 @@ kErrors BinomialHeapDeleteMax(BinomialHeapPQ* heap, Request** data) {
 }
 
 Request* BinomialHeapGetMax(BinomialHeapPQ* heap) {
-    if (!heap || !heap->root) return INC_ARGS;
+    if (!heap || !heap->root) return NULL;
     return heap->root->head->data;
 }
 
@@ -278,7 +279,6 @@ void BinomialHeapFreeTree(BinomialTree* tree) {
     if (tree == NULL) {
         return;
     }
-    BinomialTree* tmp;
     BinomialHeapFreeRecursively(tree->head);
     free(tree);
 }
@@ -327,6 +327,7 @@ kErrors BinomialHeapCopyFromTree(BinomialTree** dest, BinomialTree* source) {
         dest = &(*dest)->sibling;
         cur = cur->sibling;
     }
+    return SUCCESS;
 }
 
 kErrors BinomialHeapCopy(BinomialHeapNode** dest, BinomialHeapNode* source) {

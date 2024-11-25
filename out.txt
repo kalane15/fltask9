@@ -4,6 +4,6 @@
 2025-12-29 09:00:01 REQUEST_HANDLING_STARTED req_id: 2 operator_num: 0
 2025-12-29 09:00:01 NEW_REQUEST req_id: 0 dep_id: 3
 2025-12-29 09:00:01 REQUEST_HANDLING_STARTED req_id: 0 operator_num: 1
-2026-01-28 06:40:01 REQUEST_HANDLING_FINISHED req_id: 1, time handling: 43541  operator_id: 0
-2026-01-30 20:42:01 REQUEST_HANDLING_FINISHED req_id: 0, time handling: 46783  operator_id: 1
-2026-01-31 04:24:01 REQUEST_HANDLING_FINISHED req_id: 2, time handling: 47245  operator_id: 0
+2026-01-26 13:38:01 REQUEST_HANDLING_FINISHED req_id: 1, time handling: 41079  operator_id: 0
+2026-01-28 08:19:01 REQUEST_HANDLING_FINISHED req_id: 2, time handling: 43160  operator_id: 0
+2026-02-01 14:07:01 REQUEST_HANDLING_FINISHED req_id: 0, time handling: 49268  operator_id: 1

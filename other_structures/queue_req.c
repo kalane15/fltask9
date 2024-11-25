@@ -5,11 +5,14 @@
 #include "queue_req.h"
 
 
-void queue_create(queue_req* q, int init_buff_size) {
+bool queue_create(queue_req* q, int init_buff_size) {
 	q->size = 0;
 	q->first = 0;
 	q->buffer_size = init_buff_size;
 	q->buffer = malloc(sizeof(TYPE) * init_buff_size);
+	if (q->buffer == NULL) {
+		return false;
+	}
 }
 
 void queue_destroy(queue_req* q) {
@@ -30,9 +33,11 @@ bool queue_push(queue_req* q, TYPE d) {
 		free_place = queue_grow(q);
 	}
 
-	q->buffer[(q->first + q->size) % q->buffer_size] = d;
-	q->size++;
-	return true;
+	if (free_place) {
+		q->buffer[(q->first + q->size) % q->buffer_size] = d;
+		q->size++;
+	}
+	return free_place;
 }
 
 void queue_pop(queue_req* q) {
@@ -41,7 +46,7 @@ void queue_pop(queue_req* q) {
 	}
 	q->size--;
 	if (q->size == q->buffer_size * 4 / 9) {
-		//queue_shrink(q);
+		queue_shrink(q);
 	}
 	q->first = (q->first + 1) % q->buffer_size;
 }
@@ -63,7 +68,10 @@ void queue_shrink(queue_req* q) {
 		return;
 	}
 	queue_req q_temp;
-	queue_create(&q_temp, q->size);
+	bool status = queue_create(&q_temp, q->size);
+	if (!status) {
+		return;
+	}
 
 	while (q->size > 0) {
 		queue_push(&q_temp, queue_front(q));
@@ -76,26 +84,14 @@ void queue_shrink(queue_req* q) {
 		queue_pop(&q_temp);
 	}
 
+	TYPE* tmp = q->buffer;
 	q->buffer = (TYPE*)realloc(q->buffer, q->buffer_size * sizeof(TYPE) * 2 / 3);
+	if (q->buffer == NULL) {
+		q->buffer = tmp;
+	}
 	q->buffer_size = q->buffer_size * 2 / 3;
 }
 
 TYPE queue_front(queue_req* q) {
 	return (q->buffer[q->first]);
-}
-
-void print_q(queue_req* q) {
-	queue_req temp;
-	queue_create(&temp, q->buffer_size);
-
-	while (!queue_is_empty(q)) {
-		queue_push(&temp, queue_front(q));
-		printf("%d ", queue_front(q));
-		queue_pop(q);
-	}
-	printf("\n");
-	while (!queue_is_empty(&temp)) {
-		queue_push(q, queue_front(&temp));
-		queue_pop(&temp);
-	}
 }

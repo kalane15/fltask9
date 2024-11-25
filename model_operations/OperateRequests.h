@@ -4,7 +4,7 @@
 #include "stdlib.h"
 #include "stdbool.h"
 
-int RequestComparator(void* a, void* b);
+int RequestComparator(void* const a, void* const b);
 
 kErrors ParseRequests(int argsc, char** args, MainModel* model);
 
