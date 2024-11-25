@@ -85,7 +85,9 @@ kErrors ParseOpsAndDepsCount(FILE* config, char* temp, int* min_op_work, int* ma
 		return INC_INP_DATA;
 	}
 	status = StringToInt(temp, min_op_work);
-
+	if (status != SUCCESS) {
+		return status;
+	}
 	count = fscanf(config, "%s", temp);
 	if (count != 1) {
 		return INC_INP_DATA;
@@ -104,40 +106,49 @@ kErrors ParseOpsAndDepsCount(FILE* config, char* temp, int* min_op_work, int* ma
 kErrors ParseInput(int argsc, char** args, int* max_priority, ReqStoreType* req_store_type, DepStoreType* dep_store_type, 
 	time_t* modelling_start, time_t* modelling_finished, 
 	int* min_op_work, int* max_op_work, int* deps_count, MainModel* model){
-	/*if (argsc < 4) {
+	if (argsc < 4) {
 		return INC_NUM_OF_ARGS;
-	}*/
+	}
 	kErrors status = SUCCESS;
-	status = StringToInt(/*args[1]*/"50", max_priority);
+	status = StringToInt(args[1], max_priority);
 	if (status != SUCCESS) {
 		return status;
 	}
-	FILE* config = fopen(/*args[2]*/"in.txt", "r");
+	FILE* config = fopen(args[2], "r");
 	if (config == NULL) {
 		return INC_FILE;
 	}
 	
 	char* temp = (char*)malloc(1024);
 	if (temp == NULL) {
+		fclose(config);
 		return MEM_ALLOC_ERR;
 	}
 	int count = fscanf(config, "%[^\n]", temp);
 	fgetc(config);
 	if (count != 1) {
+		fclose(config);
+		free(temp);
 		return INC_INP_DATA;
 	}
 	status = SwitchReqStoreType(temp, req_store_type);
 	if (status != SUCCESS) {
+		fclose(config);
+		free(temp);
 		return status;
 	}
 
 	count = fscanf(config, "%[^\n]", temp);
 	fgetc(config);
 	if (count != 1) {
+		fclose(config);
+		free(temp);
 		return INC_INP_DATA;
 	}
 	status = SwitchDepStoreType(temp, dep_store_type);
 	if (status != SUCCESS) {
+		fclose(config);
+		free(temp);
 		return status;
 	}
 	//%Y-%m-%d
@@ -146,6 +157,8 @@ kErrors ParseInput(int argsc, char** args, int* max_priority, ReqStoreType* req_
 
 	status = ParseTime(config, temp, modelling_start, modelling_finished);
 	if (status != SUCCESS) {
+		fclose(config);
+		free(temp);
 		return INC_INP_DATA;
 	}
 	
@@ -153,6 +166,8 @@ kErrors ParseInput(int argsc, char** args, int* max_priority, ReqStoreType* req_
 	model->modelling_finished = *modelling_finished;
 	status = ParseOpsAndDepsCount(config, temp, min_op_work, max_op_work, deps_count);
 	if (status != SUCCESS) {
+		fclose(config);
+		free(temp);
 		return status;
 	}
 	

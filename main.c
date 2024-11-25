@@ -29,34 +29,6 @@
 #include "FibonacciHeap.h"
 
 int main(int argsc, char** args) {
-	/*FibHeapPQ pq;
-	FibHeapCreate(&pq);
-	FibHeapInsert(&pq, 5, NULL);
-	FibHeapInsert(&pq, 2, NULL);
-	FibHeapInsert(&pq, 7, NULL);
-	FibHeapInsert(&pq, 10, NULL);
-	FibHeapInsert(&pq, 3, NULL);
-	FibHeapConsolidate(&pq);
-	FibHeapPrint(&pq);
-	printf("\n");
-	FibHeapPQ pq1;
-	FibHeapCreate(&pq1);
-	FibHeapInsert(&pq1, 3, NULL);
-	FibHeapInsert(&pq1, 8, NULL);
-	FibHeapInsert(&pq1, 1, NULL);
-	FibHeapInsert(&pq1, 20, NULL);
-	FibHeapInsert(&pq1, 30, NULL);
-	FibHeapConsolidate(&pq1);
-	FibHeapPrint(&pq1);
-
-	FibHeapPQ* res = (FibHeapPQ*)malloc(sizeof(FibHeapPQ));
-	FibHeapCreate(res);
-	FibHeapMergeWithDestruction(&pq, &pq1, &res);
-
-	printf("\n");
-	FibHeapPrint(res);
-	FibHeapFree(res);
-	return 0;*/
 	srand(time(NULL));
 	kErrors status = SUCCESS;
 	int max_priority;
@@ -83,6 +55,7 @@ int main(int argsc, char** args) {
 	FILE* out = fopen("out.txt", "w");
 	status = SimulateModel(&main_model, out);
 	if (status != SUCCESS) {
+		fclose(out);
 		printf("%d\n", status);
 		return status;
 	}

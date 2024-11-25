@@ -19,15 +19,35 @@ kErrors ParseRequests(int argsc, char** args, MainModel* model) {
 	char* time_time = (char*)malloc(128);
 	char* id = (char*)malloc(256);
 	char* text = (char*)malloc(4096);
+	if (time_data == NULL || cur_string == NULL || time_time == NULL || id == NULL || text == NULL) {
+		if (time_data != NULL) {
+			free(time_data);
+		}
+		if (cur_string != NULL) {
+			free(cur_string);
+		}
+		if (time_time != NULL) {
+			free(time);
+		}
+		if (id != NULL) {
+			free(id);
+		}
+		if (text != NULL) {
+			free(text);
+		}
+	}
+
 	int priority;	
 	int count = 0;
 	int r_id = 0;
 	model->pending_requests = (queue_req*)malloc(sizeof(queue_req));
 	if (model->pending_requests == NULL) {
-		return MEM_ALLOC_ERR;
+		status = MEM_ALLOC_ERR;
 	}
 
-	queue_create(model->pending_requests, 10);
+	if (status == SUCCESS) {
+		queue_create(model->pending_requests, 10);
+	}
 	for (int i = 3; i < argsc; i++) {
 		if (status != SUCCESS) {
 			break;
@@ -98,7 +118,7 @@ kErrors DistributeRequests(MainModel* model, FILE* out) {
 				if (deps[i]->operators[op].is_working == false) {
 					status = GenericDeleteMax(deps[i]->req_queue, &(deps[i]->operators[op].current_request), model);
 					if (status != SUCCESS) {
-						continue;
+						break;
 					}
 					deps[i]->operators[op].is_working = true;
 
