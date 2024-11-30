@@ -1,9 +1,110 @@
-2025-12-29 01:00:01 NEW_REQUEST req_id: 1 dep_id: 4
-2025-12-29 01:00:01 REQUEST_HANDLING_STARTED req_id: 1 operator_num: 0
-2025-12-29 09:00:01 NEW_REQUEST req_id: 2 dep_id: 3
-2025-12-29 09:00:01 REQUEST_HANDLING_STARTED req_id: 2 operator_num: 0
-2025-12-29 09:00:01 NEW_REQUEST req_id: 0 dep_id: 3
-2025-12-29 09:00:01 REQUEST_HANDLING_STARTED req_id: 0 operator_num: 1
-2026-01-26 13:38:01 REQUEST_HANDLING_FINISHED req_id: 1, time handling: 41079  operator_id: 0
-2026-01-28 08:19:01 REQUEST_HANDLING_FINISHED req_id: 2, time handling: 43160  operator_id: 0
-2026-02-01 14:07:01 REQUEST_HANDLING_FINISHED req_id: 0, time handling: 49268  operator_id: 1
+2025-11-18 23:00:01 NEW_REQUEST req_id: 31 dep_id: 1
+2025-11-18 23:00:01 REQUEST_HANDLING_STARTED req_id: 31 operator_num: 0
+2025-11-26 23:57:01 REQUEST_HANDLING_FINISHED req_id: 31, time handling: 11578  operator_id: 0
+2025-12-10 04:00:01 NEW_REQUEST req_id: 21 dep_id: 6
+2025-12-10 04:00:01 REQUEST_HANDLING_STARTED req_id: 21 operator_num: 0
+2025-12-15 20:38:01 REQUEST_HANDLING_FINISHED req_id: 21, time handling: 8199  operator_id: 0
+2025-12-25 06:00:01 NEW_REQUEST req_id: 22 dep_id: 0
+2025-12-25 06:00:01 REQUEST_HANDLING_STARTED req_id: 22 operator_num: 0
+2025-12-29 11:00:01 NEW_REQUEST req_id: 8 dep_id: 7
+2025-12-29 11:00:01 REQUEST_HANDLING_STARTED req_id: 8 operator_num: 0
+2025-12-31 11:00:01 NEW_REQUEST req_id: 25 dep_id: 2
+2025-12-31 11:00:01 REQUEST_HANDLING_STARTED req_id: 25 operator_num: 0
+2026-01-02 09:00:01 NEW_REQUEST req_id: 2 dep_id: 7
+2026-01-03 11:00:01 NEW_REQUEST req_id: 33 dep_id: 5
+2026-01-03 11:00:01 REQUEST_HANDLING_STARTED req_id: 33 operator_num: 0
+2026-01-06 01:14:01 REQUEST_HANDLING_FINISHED req_id: 22, time handling: 16995  operator_id: 0
+2026-01-10 17:01:01 REQUEST_HANDLING_FINISHED req_id: 33, time handling: 10442  operator_id: 0
+2026-01-12 09:10:01 REQUEST_HANDLING_FINISHED req_id: 25, time handling: 17171  operator_id: 0
+2026-01-13 19:26:01 REQUEST_HANDLING_FINISHED req_id: 8, time handling: 22107  operator_id: 0
+2026-01-19 15:00:01 NEW_REQUEST req_id: 23 dep_id: 5
+2026-01-19 15:00:01 REQUEST_HANDLING_STARTED req_id: 23 operator_num: 0
+2026-01-19 15:00:01 REQUEST_HANDLING_STARTED req_id: 2 operator_num: 0
+2026-01-22 05:09:01 REQUEST_HANDLING_FINISHED req_id: 23, time handling: 3730  operator_id: 0
+2026-01-25 03:36:01 REQUEST_HANDLING_FINISHED req_id: 2, time handling: 7957  operator_id: 0
+2026-01-29 23:00:01 NEW_REQUEST req_id: 7 dep_id: 7
+2026-01-29 23:00:01 REQUEST_HANDLING_STARTED req_id: 7 operator_num: 0
+2026-02-06 15:00:01 NEW_REQUEST req_id: 0 dep_id: 3
+2026-02-06 15:00:01 REQUEST_HANDLING_STARTED req_id: 0 operator_num: 0
+2026-02-06 17:00:01 NEW_REQUEST req_id: 11 dep_id: 1
+2026-02-06 17:00:01 REQUEST_HANDLING_STARTED req_id: 11 operator_num: 0
+2026-02-07 05:00:01 NEW_REQUEST req_id: 17 dep_id: 3
+2026-02-07 05:00:01, DEPARTMENT_OVERLOADED req_id: 17, requests were moved to dep with id: 0
+2026-02-09 03:53:01 REQUEST_HANDLING_FINISHED req_id: 7, time handling: 14694  operator_id: 0
+2026-02-09 12:06:01 REQUEST_HANDLING_FINISHED req_id: 0, time handling: 4147  operator_id: 0
+2026-02-11 05:34:01 REQUEST_HANDLING_FINISHED req_id: 11, time handling: 6515  operator_id: 0
+2026-03-15 01:00:01 NEW_REQUEST req_id: 6 dep_id: 2
+2026-03-15 01:00:01 REQUEST_HANDLING_STARTED req_id: 17 operator_num: 0
+2026-03-15 01:00:01 REQUEST_HANDLING_STARTED req_id: 6 operator_num: 0
+2026-03-19 05:00:01 NEW_REQUEST req_id: 4 dep_id: 1
+2026-03-19 05:00:01 REQUEST_HANDLING_STARTED req_id: 4 operator_num: 0
+2026-03-26 16:12:01 REQUEST_HANDLING_FINISHED req_id: 17, time handling: 16753  operator_id: 0
+2026-03-31 00:00:01 NEW_REQUEST req_id: 32 dep_id: 1
+2026-03-31 00:00:01, DEPARTMENT_OVERLOADED req_id: 32, requests were moved to dep with id: 0
+2026-03-31 14:21:01 REQUEST_HANDLING_FINISHED req_id: 4, time handling: 17842  operator_id: 0
+2026-04-06 17:16:01 REQUEST_HANDLING_FINISHED req_id: 6, time handling: 32657  operator_id: 0
+2026-04-17 23:00:01 NEW_REQUEST req_id: 10 dep_id: 4
+2026-04-17 23:00:01 REQUEST_HANDLING_STARTED req_id: 32 operator_num: 0
+2026-04-17 23:00:01 REQUEST_HANDLING_STARTED req_id: 10 operator_num: 0
+2026-04-18 04:57:01 REQUEST_HANDLING_FINISHED req_id: 10, time handling: 358  operator_id: 0
+2026-05-06 13:52:01 REQUEST_HANDLING_FINISHED req_id: 32, time handling: 26813  operator_id: 0
+2026-05-13 07:00:01 NEW_REQUEST req_id: 19 dep_id: 8
+2026-05-13 07:00:01 REQUEST_HANDLING_STARTED req_id: 19 operator_num: 0
+2026-05-26 03:48:01 REQUEST_HANDLING_FINISHED req_id: 19, time handling: 18529  operator_id: 0
+2026-06-19 11:00:01 NEW_REQUEST req_id: 26 dep_id: 6
+2026-06-19 11:00:01 REQUEST_HANDLING_STARTED req_id: 26 operator_num: 0
+2026-07-01 09:29:01 REQUEST_HANDLING_FINISHED req_id: 26, time handling: 17190  operator_id: 0
+2026-07-20 00:00:01 NEW_REQUEST req_id: 12 dep_id: 8
+2026-07-20 00:00:01 REQUEST_HANDLING_STARTED req_id: 12 operator_num: 0
+2026-08-03 12:00:01 NEW_REQUEST req_id: 35 dep_id: 1
+2026-08-03 12:00:01 REQUEST_HANDLING_STARTED req_id: 35 operator_num: 0
+2026-08-03 16:00:01 NEW_REQUEST req_id: 34 dep_id: 8
+2026-08-10 02:57:01 REQUEST_HANDLING_FINISHED req_id: 12, time handling: 30418  operator_id: 0
+2026-08-11 17:45:01 REQUEST_HANDLING_FINISHED req_id: 35, time handling: 11866  operator_id: 0
+2026-08-11 18:00:01 NEW_REQUEST req_id: 3 dep_id: 8
+2026-08-11 18:00:01 REQUEST_HANDLING_STARTED req_id: 34 operator_num: 0
+2026-08-19 18:00:01 NEW_REQUEST req_id: 16 dep_id: 2
+2026-08-19 18:00:01 REQUEST_HANDLING_STARTED req_id: 16 operator_num: 0
+2026-08-21 00:00:01 NEW_REQUEST req_id: 30 dep_id: 4
+2026-08-21 00:00:01 REQUEST_HANDLING_STARTED req_id: 30 operator_num: 0
+2026-08-22 23:07:01 REQUEST_HANDLING_FINISHED req_id: 34, time handling: 16148  operator_id: 0
+2026-08-23 12:00:01 NEW_REQUEST req_id: 20 dep_id: 3
+2026-08-23 12:00:01 REQUEST_HANDLING_STARTED req_id: 20 operator_num: 0
+2026-08-23 12:00:01 REQUEST_HANDLING_STARTED req_id: 3 operator_num: 0
+2026-08-25 23:48:01 REQUEST_HANDLING_FINISHED req_id: 20, time handling: 3589  operator_id: 0
+2026-09-03 21:09:01 REQUEST_HANDLING_FINISHED req_id: 3, time handling: 16390  operator_id: 0
+2026-09-04 05:00:01 NEW_REQUEST req_id: 5 dep_id: 3
+2026-09-04 05:00:01 REQUEST_HANDLING_STARTED req_id: 5 operator_num: 0
+2026-09-04 14:08:01 REQUEST_HANDLING_FINISHED req_id: 16, time handling: 22809  operator_id: 0
+2026-09-11 07:09:01 REQUEST_HANDLING_FINISHED req_id: 30, time handling: 30670  operator_id: 0
+2026-09-16 07:46:01 REQUEST_HANDLING_FINISHED req_id: 5, time handling: 17447  operator_id: 0
+2026-09-26 18:00:01 NEW_REQUEST req_id: 28 dep_id: 3
+2026-09-26 18:00:01 REQUEST_HANDLING_STARTED req_id: 28 operator_num: 0
+2026-09-30 22:58:01 REQUEST_HANDLING_FINISHED req_id: 28, time handling: 6059  operator_id: 0
+2026-10-03 22:00:01 NEW_REQUEST req_id: 13 dep_id: 7
+2026-10-03 22:00:01 REQUEST_HANDLING_STARTED req_id: 13 operator_num: 0
+2026-10-05 20:00:01 NEW_REQUEST req_id: 18 dep_id: 9
+2026-10-05 20:00:01 REQUEST_HANDLING_STARTED req_id: 18 operator_num: 0
+2026-10-09 04:43:01 REQUEST_HANDLING_FINISHED req_id: 18, time handling: 4844  operator_id: 0
+2026-10-14 18:31:01 REQUEST_HANDLING_FINISHED req_id: 13, time handling: 15632  operator_id: 0
+2026-10-15 19:00:01 NEW_REQUEST req_id: 9 dep_id: 0
+2026-10-15 19:00:01 REQUEST_HANDLING_STARTED req_id: 9 operator_num: 0
+2026-10-18 19:00:01 NEW_REQUEST req_id: 14 dep_id: 9
+2026-10-18 19:00:01 REQUEST_HANDLING_STARTED req_id: 14 operator_num: 0
+2026-10-24 21:59:01 REQUEST_HANDLING_FINISHED req_id: 14, time handling: 8820  operator_id: 0
+2026-10-25 01:07:01 REQUEST_HANDLING_FINISHED req_id: 9, time handling: 13328  operator_id: 0
+2026-10-28 15:00:01 NEW_REQUEST req_id: 24 dep_id: 2
+2026-10-28 15:00:01 REQUEST_HANDLING_STARTED req_id: 24 operator_num: 0
+2026-10-28 15:00:01 NEW_REQUEST req_id: 24 dep_id: 2
+2026-10-28 15:00:01, DEPARTMENT_OVERLOADED req_id: 24, requests were moved to dep with id: 0
+2026-10-28 15:00:01 NEW_REQUEST req_id: 24 dep_id: 2
+2026-10-28 15:00:01 REQUEST_HANDLING_STARTED req_id: 24 operator_num: 0
+2026-10-28 15:00:01, DEPARTMENT_OVERLOADED req_id: 24, requests were moved to dep with id: 0
+2026-10-28 15:00:01 NEW_REQUEST req_id: 24 dep_id: 2
+2026-10-28 15:00:01, DEPARTMENT_OVERLOADED req_id: 24, requests were moved to dep with id: 1
+2026-10-28 15:00:01 NEW_REQUEST req_id: 24 dep_id: 2
+2026-10-28 15:00:01 REQUEST_HANDLING_STARTED req_id: 24 operator_num: 0
+2026-10-28 15:00:01, DEPARTMENT_OVERLOADED req_id: 24, requests were moved to dep with id: 1
+2026-11-02 09:53:01 REQUEST_HANDLING_FINISHED req_id: 24, time handling: 6894  operator_id: 0
+2026-11-02 09:53:01 REQUEST_HANDLING_FINISHED req_id: 24, time handling: 6894  operator_id: 0
+2026-11-02 09:53:01 REQUEST_HANDLING_FINISHED req_id: 24, time handling: 6894  operator_id: 0

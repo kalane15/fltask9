@@ -38,6 +38,18 @@ kErrors ProccessError(kErrors error) {
 		case INC_SEPS:
 			printf("Incorrect separators\n");
 			break;
+		case EL_EXIST:
+			printf("Duplicate elements\n");
+			break;
+		case INC_REQ_STORE_TYPE:
+			printf("Incorrect req store type\n");
+			break;
+		case INC_DEP_STORE_TYPE:
+			printf("Incorrect dep store type\n");
+			break;
+		case INC_TIME:
+			printf("Incorrect time\n");
+			break;
 		case SUCCESS:
 			//dont do anything
 			break;

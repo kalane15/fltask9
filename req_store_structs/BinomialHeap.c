@@ -378,7 +378,7 @@ kErrors BinomialHeapMeld(BinomialHeapPQ* p_in, BinomialHeapPQ* p_out) {
     while (p_in->size > 0) {
         status = BinomialHeapDeleteMax(p_in, &cur_req);
         if (status != SUCCESS) {
-            return status;
+            break;
         }
         status = BinomialHeapInsert(p_out, cur_req->priority, cur_req);
         if (status != SUCCESS) {

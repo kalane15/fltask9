@@ -7,6 +7,7 @@ typedef struct queue_req queue_req;
 #include "time.h"
 #include "queue_req.h"
 #include "InputParsing.h"
+#include "mylib.h"
 
 typedef struct MainModel {
 	void* departments_storage_structure;
@@ -43,12 +44,12 @@ typedef struct Department {
 	void* req_queue;
 	struct Operator* operators;
 	int op_count;
-	int overload_coeff;
+	double overload_coeff;
 	int requests_in_queue;
 	char* dep_id;
 } Department;
 
-kErrors DepCreate(int op_count, int overload_coeff, Department** out, char* id, MainModel* model);
+kErrors DepCreate(int op_count, double overload_coeff, Department** out, char* id, MainModel* model);
 kErrors RequestCreate(int priority, char* id, char* text, char* time, Request** out, int r_id, MainModel* model);
 kErrors RequestCopy(Request** dest, Request* source);
 void RequestFree(Request* req);

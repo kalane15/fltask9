@@ -8,7 +8,7 @@
 #include "Generics.h"
 
 
-kErrors DepCreate(int op_count, int overload_coeff, Department** out, char* id, MainModel* model) {
+kErrors DepCreate(int op_count, double overload_coeff, Department** out, char* id, MainModel* model) {
 	kErrors status = SUCCESS;
 	Department* dep = (Department*)calloc(1, sizeof(Department));
 	if (dep == NULL) {
@@ -37,7 +37,9 @@ kErrors DepCreate(int op_count, int overload_coeff, Department** out, char* id, 
 		free(dep);
 	}
 	dep->operators = (Operator*)calloc(op_count, sizeof(Operator));
-
+	if (dep->operators == NULL) {
+		return MEM_ALLOC_ERR;
+	}
 	*out = dep;
 	return SUCCESS;
 }

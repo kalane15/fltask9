@@ -305,7 +305,7 @@ kErrors FibHeapMeld(FibHeapPQ* p_in, FibHeapPQ* p_out) {
 	while (p_in->size > 0) {
 		status = FibHeapDeleteMax(p_in, &cur_req);
 		if (status != SUCCESS) {
-			return status;
+			break;
 		}
 		status = FibHeapInsert(p_out, cur_req->priority, cur_req);
 		if (status != SUCCESS) {

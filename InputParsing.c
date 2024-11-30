@@ -174,5 +174,5 @@ kErrors ParseInput(int argsc, char** args, int* max_priority, ReqStoreType* req_
 	status = ParseDepsInfo(config, model, *max_priority, *min_op_work, *max_op_work, *deps_count);
 	free(temp);
 	fclose(config);	
-	return SUCCESS;
+	return status;
 }

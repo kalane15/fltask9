@@ -18,8 +18,16 @@ kErrors ParseDepsInfo(FILE* config, MainModel* model,
 	int count;
 	char buffer[1024];
 
-	int temp_overload_coeffs[50];
-	int temp_op_count[50];
+	double* temp_overload_coeffs = (double*)malloc(sizeof(double) * deps_count);
+	if (temp_overload_coeffs == NULL) {
+		return MEM_ALLOC_ERR;
+	}
+
+	int* temp_op_count = (int*)malloc(sizeof(int) * deps_count);
+	if (temp_op_count == NULL) {
+		free(temp_overload_coeffs);
+		return MEM_ALLOC_ERR;
+	}
 	
 	fgets(buffer, 1024, config);
 	int i = 0;
@@ -35,7 +43,7 @@ kErrors ParseDepsInfo(FILE* config, MainModel* model,
 		cur_lex = strtok(NULL, " ");
 	}
 
-	if (i != deps_count) {
+	if (i != deps_count + 1) {
 		return INC_NUM_OF_ARGS;
 	}
 
@@ -46,10 +54,11 @@ kErrors ParseDepsInfo(FILE* config, MainModel* model,
 		if (cur_lex[strlen(cur_lex) - 1] == '\n') {
 			cur_lex[strlen(cur_lex) - 1] = '\0';
 		}
-		status = StringToInt(cur_lex, &temp_overload_coeffs[i++]);
-		if (status != SUCCESS) {
-			return status;
+		if (i >= deps_count) {
+			return INC_INP_DATA;
 		}
+
+		temp_overload_coeffs[i++] = ParseDouble(cur_lex);
 		cur_lex = strtok(NULL, " ");
 	}
 
